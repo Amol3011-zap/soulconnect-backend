@@ -13,10 +13,24 @@ from app.database import engine, Base
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     import os
+    from sqlalchemy import text
     db_url = os.getenv("DATABASE_URL", "NOT SET")
     print(f"DATABASE_URL starts with: {db_url[:40]}...")
     print("Creating database tables...")
     Base.metadata.create_all(bind=engine)
+    print("Running column migrations...")
+    try:
+        from app.database import get_engine
+        with get_engine().connect() as conn:
+            conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS age INTEGER"))
+            conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS gender VARCHAR"))
+            conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS role VARCHAR DEFAULT 'user'"))
+            conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS state VARCHAR"))
+            conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS country VARCHAR"))
+            conn.commit()
+        print("Column migrations complete!")
+    except Exception as e:
+        print(f"Migration note: {e}")
     print("SoulConnect API started successfully!")
     yield
     print("SoulConnect API shutting down...")
