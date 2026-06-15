@@ -9,14 +9,17 @@ load_dotenv()
 from app.routes import auth, users, matching, chats, healers, sessions, meetups, admin
 from app.database import engine, Base
 
-Base.metadata.create_all(bind=engine)
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("SoulConnect API Starting...")
+    import os
+    db_url = os.getenv("DATABASE_URL", "NOT SET")
+    print(f"DATABASE_URL starts with: {db_url[:40]}...")
+    print("Creating database tables...")
+    Base.metadata.create_all(bind=engine)
+    print("SoulConnect API started successfully!")
     yield
-    print("SoulConnect API Shutting down...")
+    print("SoulConnect API shutting down...")
 
 
 app = FastAPI(
