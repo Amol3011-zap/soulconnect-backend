@@ -52,17 +52,22 @@ class User(Base):
     phone = Column(String, unique=True, index=True, nullable=False)
     phone_verified = Column(Boolean, default=False)
     name = Column(String, nullable=True)
+    age = Column(Integer, nullable=True)
+    gender = Column(String, nullable=True)
     avatar_url = Column(String, nullable=True)
     bio = Column(String(500), nullable=True)
+    role = Column(String, default="user")
 
     primary_problem = Column(Enum(ProblemEnum), nullable=False)
-    secondary_problems = Column(JSON, default=[])
+    secondary_problems = Column(JSON, default=list)
     problem_context = Column(String(500), nullable=True)
 
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     address = Column(String, nullable=True)
     city = Column(String, nullable=True)
+    state = Column(String, nullable=True)
+    country = Column(String, nullable=True)
     distance_preference = Column(Integer, default=10)
     hide_location = Column(Boolean, default=False)
 

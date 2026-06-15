@@ -14,10 +14,15 @@ class SignupRequest(BaseModel):
     name: str
     primary_problem: str
     secondary_problems: list = []
-    latitude: float
-    longitude: float
-    address: str
-    city: str
+    age: int = None
+    gender: str = None
+    role: str = "user"
+    country: str = None
+    state: str = None
+    city: str = None
+    latitude: float = 19.076
+    longitude: float = 72.8777
+    address: str = ""
     timezone: str = "Asia/Kolkata"
     distance_preference: int = 10
 
@@ -41,10 +46,15 @@ async def signup(request: SignupRequest, db: Session = Depends(get_db)):
         name=request.name,
         primary_problem=request.primary_problem,
         secondary_problems=request.secondary_problems,
+        age=request.age,
+        gender=request.gender,
+        role=request.role,
+        country=request.country,
+        state=request.state,
+        city=request.city,
         latitude=request.latitude,
         longitude=request.longitude,
         address=request.address,
-        city=request.city,
         timezone=request.timezone,
         distance_preference=request.distance_preference,
         phone_verified=True,
