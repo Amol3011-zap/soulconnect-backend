@@ -5,11 +5,23 @@ from typing import Optional
 from pydantic import BaseModel
 
 from app.database import get_db
-from app.models import User, UserChallengeStreak, UserChallengeCompletion
+from app.models import User, UserChallengeStreak, UserChallengeCompletion, UserJourney, JourneyActivity, ActivityTypeEnum
 from app.routes.users import get_current_user
 from app.services import challenges_tracker as ct
 
 router = APIRouter()
+
+# Maps challenge type → Soul Journey activity type
+CHALLENGE_TO_JOURNEY = {
+    "meditation":     ActivityTypeEnum.MEDITATION,
+    "breathing":      ActivityTypeEnum.MEDITATION,
+    "journal":        ActivityTypeEnum.JOURNAL,
+    "gratitude":      ActivityTypeEnum.JOURNAL,
+    "yoga":           ActivityTypeEnum.MEDITATION,
+    "reflection":     ActivityTypeEnum.REFLECTION,
+    "chat_support":   ActivityTypeEnum.CHAT_SESSION,
+    "healer_session": ActivityTypeEnum.HEALER_BOOKING,
+}
 
 
 # ── Schemas ───────────────────────────────────────────────────────────────────
@@ -117,6 +129,29 @@ async def complete_challenge(
 
     streak.total_points += pts["total_points"]
     streak.last_completion_date = now
+
+    # Auto-log to Soul Journey activities
+    challenge_info = ct.CHALLENGE_LIBRARY[challenge_id]
+    journey_activity_type = CHALLENGE_TO_JOURNEY.get(challenge_info["type"])
+    if journey_activity_type:
+        journey = db.query(UserJourney).filter(UserJourney.user_id == current_user.id).first()
+        if not journey:
+            journey = UserJourney(user_id=current_user.id)
+            db.add(journey)
+            db.flush()
+        intensity = min(10, max(1, round(challenge_info["points"] / 15)))
+        journey_entry = JourneyActivity(
+            journey_id=journey.id,
+            user_id=current_user.id,
+            activity_type=journey_activity_type,
+            duration_minutes=challenge_info["duration"],
+            intensity=intensity,
+            notes=f"Auto-logged from Daily Challenge: {challenge_info['name']}",
+            logged_at=now,
+        )
+        db.add(journey_entry)
+        journey.total_activities += 1
+
     db.commit()
 
     return {
