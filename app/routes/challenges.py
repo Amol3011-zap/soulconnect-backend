@@ -2,12 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from typing import Optional
-from pydantic import BaseModel
+import time
 
 from app.database import get_db
 from app.models import User, UserChallengeStreak, UserChallengeCompletion, UserJourney, JourneyActivity, ActivityTypeEnum
 from app.routes.users import get_current_user
 from app.services import challenges_tracker as ct
+from pydantic import BaseModel
 
 router = APIRouter()
 
@@ -22,6 +23,25 @@ CHALLENGE_TO_JOURNEY = {
     "chat_support":   ActivityTypeEnum.CHAT_SESSION,
     "healer_session": ActivityTypeEnum.HEALER_BOOKING,
 }
+
+# ── In-memory cache (user_id → (timestamp, data)) ─────────────────────────────
+_today_cache: dict = {}
+CACHE_TTL = 3600  # 1 hour
+
+
+def _get_cached(user_id: int):
+    entry = _today_cache.get(user_id)
+    if entry and time.time() - entry[0] < CACHE_TTL:
+        return entry[1]
+    return None
+
+
+def _set_cached(user_id: int, data: dict):
+    _today_cache[user_id] = (time.time(), data)
+
+
+def _invalidate_cache(user_id: int):
+    _today_cache.pop(user_id, None)
 
 
 # ── Schemas ───────────────────────────────────────────────────────────────────
@@ -60,7 +80,11 @@ async def get_today_challenges(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Return today's 3 challenges with completion status."""
+    """Return today's 3 challenges with completion status. Cached per-user for 1 hour."""
+    cached = _get_cached(current_user.id)
+    if cached:
+        return cached
+
     streak = _get_or_create_streak(current_user, db)
     completed = _completed_today_ids(current_user.id, db)
     bonus = ct.calculate_streak_bonus(streak.current_streak)
@@ -71,7 +95,7 @@ async def get_today_challenges(
         c["points"] + bonus for c in challenges if not c["completed"]
     )
 
-    return {
+    response = {
         "cycle_day": ct.get_current_cycle_day(),
         "theme": ct.TWO_WEEK_SCHEDULE[ct.get_current_cycle_day() - 1]["theme"],
         "challenges": challenges,
@@ -83,6 +107,9 @@ async def get_today_challenges(
         "longest_streak": streak.longest_streak,
         "total_points": streak.total_points,
     }
+
+    _set_cached(current_user.id, response)
+    return response
 
 
 @router.post("/complete/{challenge_id}")
@@ -154,6 +181,9 @@ async def complete_challenge(
 
     db.commit()
 
+    # Invalidate cache so next GET /today reflects the completion
+    _invalidate_cache(current_user.id)
+
     return {
         "challenge_id": challenge_id,
         "challenge_name": ct.CHALLENGE_LIBRARY[challenge_id]["name"],
@@ -189,3 +219,62 @@ async def get_weekly_summary(
         by_date.setdefault(ds, set()).add(c.challenge_id)
 
     return ct.get_weekly_summary(by_date)
+
+
+@router.get("/leaderboard")
+async def get_leaderboard(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Return top 10 users by total points, plus current user's rank."""
+    # Top 10 by total_points
+    top_rows = (
+        db.query(UserChallengeStreak, User)
+        .join(User, User.id == UserChallengeStreak.user_id)
+        .filter(UserChallengeStreak.total_points > 0)
+        .order_by(UserChallengeStreak.total_points.desc())
+        .limit(10)
+        .all()
+    )
+
+    top10 = []
+    my_rank_in_top10 = None
+    for rank, (streak, user) in enumerate(top_rows, start=1):
+        name = user.name or "Anonymous"
+        # Mask name for privacy: "Amol" → "A***"
+        masked = name[0].upper() + "***" if len(name) > 1 else name[0].upper()
+        is_me = user.id == current_user.id
+        if is_me:
+            my_rank_in_top10 = rank
+        top10.append({
+            "rank": rank,
+            "name": masked,
+            "points": streak.total_points,
+            "streak": streak.current_streak,
+            "longest_streak": streak.longest_streak,
+            "is_me": is_me,
+        })
+
+    # Current user's overall rank (if not in top 10)
+    my_streak = db.query(UserChallengeStreak).filter(
+        UserChallengeStreak.user_id == current_user.id
+    ).first()
+
+    my_points = my_streak.total_points if my_streak else 0
+    my_current_streak = my_streak.current_streak if my_streak else 0
+
+    if my_rank_in_top10:
+        my_rank = my_rank_in_top10
+    else:
+        # Count how many users have more points
+        above_me = db.query(UserChallengeStreak).filter(
+            UserChallengeStreak.total_points > my_points
+        ).count()
+        my_rank = above_me + 1
+
+    return {
+        "top10": top10,
+        "my_rank": my_rank,
+        "my_points": my_points,
+        "my_streak": my_current_streak,
+    }
