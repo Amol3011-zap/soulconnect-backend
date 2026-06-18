@@ -10,6 +10,7 @@ from app.routes import auth, users, matching, chats, healers, sessions, meetups,
 from app.routes import journey
 from app.routes import challenges
 from app.routes import dashboard
+from app.routes import analytics, consent, privacy
 from app.database import engine, Base
 
 
@@ -30,6 +31,8 @@ async def lifespan(app: FastAPI):
             conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS role VARCHAR DEFAULT 'user'"))
             conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS state VARCHAR"))
             conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS country VARCHAR"))
+            conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS email VARCHAR"))
+            conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS username VARCHAR"))
             conn.commit()
         print("Column migrations complete!")
     except Exception as e:
@@ -65,6 +68,9 @@ app.include_router(admin.router, prefix="/api/admin", tags=["Admin"])
 app.include_router(journey.router, prefix="/api/journey", tags=["Soul Journey"])
 app.include_router(challenges.router, prefix="/api/challenges", tags=["Daily Challenges"])
 app.include_router(dashboard.router, prefix="/api/dashboard", tags=["Dashboard"])
+app.include_router(analytics.router, prefix="/api/analytics", tags=["Analytics"])
+app.include_router(consent.router, prefix="/api/consent", tags=["Consent"])
+app.include_router(privacy.router, prefix="/api/privacy", tags=["Privacy & GDPR"])
 
 
 @app.get("/")

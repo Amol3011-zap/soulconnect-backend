@@ -399,3 +399,283 @@ class CrisisResource(Base):
     website = Column(String, nullable=True)
     description = Column(Text)
     available_24_7 = Column(Boolean, default=True)
+
+
+# ========== VISITOR ANALYTICS ==========
+
+class VisitorAnalytics(Base):
+    __tablename__ = "visitor_analytics"
+
+    id = Column(Integer, primary_key=True, index=True)
+    session_id = Column(String(128), unique=True, index=True, nullable=False)
+    device_type = Column(String(20))          # mobile / tablet / desktop
+    browser = Column(String(50))
+    os = Column(String(50))
+    screen_resolution = Column(String(20))
+    country = Column(String(80))
+    city = Column(String(80))                 # approximate only
+    referral_source = Column(String(500))
+    landing_page = Column(String(500))
+    pages_viewed = Column(JSON, default=list)
+    session_duration_seconds = Column(Integer, default=0)
+    click_events = Column(JSON, default=list)
+    utm_source = Column(String(200))
+    utm_medium = Column(String(200))
+    utm_campaign = Column(String(200))
+    utm_content = Column(String(200))
+    utm_term = Column(String(200))
+    created_at = Column(DateTime, default=datetime.utcnow)
+    last_seen_at = Column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        Index("ix_visitor_analytics_created", "created_at"),
+        Index("ix_visitor_analytics_country", "country"),
+    )
+
+
+# ========== USER CONSENT ==========
+
+class UserConsent(Base):
+    __tablename__ = "user_consent"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)
+    session_id = Column(String(128), nullable=True)   # for pre-auth consent
+    privacy_policy_accepted = Column(Boolean, default=False)
+    terms_accepted = Column(Boolean, default=False)
+    safety_policy_accepted = Column(Boolean, default=False)
+    community_guidelines_accepted = Column(Boolean, default=False)
+    analytics_consent = Column(Boolean, default=False)
+    marketing_consent = Column(Boolean, default=False)
+    policy_version = Column(String(20), default="1.0")
+    accepted_at = Column(DateTime, default=datetime.utcnow)
+    ip_address = Column(String(45))           # IPv4 or IPv6
+    user_agent = Column(String(500))
+
+
+# ========== USER PROFILE (EXTENDED) ==========
+
+class UserProfile(Base):
+    __tablename__ = "user_profiles"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), unique=True, nullable=False)
+    username = Column(String(50), unique=True, nullable=True)
+    email = Column(String(255), unique=True, nullable=True)
+    profile_photo_url = Column(String(500), nullable=True)
+    language = Column(String(10), default="en")
+
+    # Onboarding data
+    primary_challenges = Column(JSON, default=list)   # ["anxiety","grief",...]
+    goals = Column(JSON, default=list)                # ["find_support","join_circles",...]
+
+    # Activity counters (denormalized for perf)
+    messages_sent = Column(Integer, default=0)
+    circles_joined = Column(Integer, default=0)
+    events_attended = Column(Integer, default=0)
+    guides_viewed = Column(Integer, default=0)
+    bookings_created = Column(Integer, default=0)
+    sessions_attended = Column(Integer, default=0)
+
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow)
+
+
+# ========== USER PREFERENCES ==========
+
+class UserPreferences(Base):
+    __tablename__ = "user_preferences"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), unique=True, nullable=False)
+
+    notifications_email = Column(Boolean, default=True)
+    notifications_push = Column(Boolean, default=True)
+    notifications_sms = Column(Boolean, default=False)
+    show_online_status = Column(Boolean, default=True)
+    allow_anonymous_matching = Column(Boolean, default=True)
+    data_sharing_analytics = Column(Boolean, default=True)
+    data_sharing_research = Column(Boolean, default=False)
+
+    preferred_guide_gender = Column(String(20), nullable=True)
+    preferred_session_type = Column(String(20), default="video")
+    theme = Column(String(20), default="light")
+
+    updated_at = Column(DateTime, default=datetime.utcnow)
+
+
+# ========== USER MOODS ==========
+
+class UserMood(Base):
+    __tablename__ = "user_moods"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    mood_score = Column(Integer, nullable=False)      # 1-10
+    mood_label = Column(String(50))                   # anxious / calm / hopeful / etc.
+    mood_tags = Column(JSON, default=list)            # ["stressed","tired",...]
+    notes = Column(Text, nullable=True)               # encrypted client-side
+    logged_at = Column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        Index("ix_user_moods_user_date", "user_id", "logged_at"),
+    )
+
+
+# ========== JOURNAL ENTRIES (ENCRYPTED) ==========
+
+class JournalEntry(Base):
+    __tablename__ = "journal_entries"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    title_encrypted = Column(Text, nullable=True)    # AES-256 encrypted
+    content_encrypted = Column(Text, nullable=False)  # AES-256 encrypted
+    mood_score = Column(Integer, nullable=True)       # 1-10, stored plaintext for analytics
+    tags = Column(JSON, default=list)                 # topic tags, non-sensitive
+    is_private = Column(Boolean, default=True)
+    word_count_approx = Column(Integer, default=0)    # for analytics, no content
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        Index("ix_journal_entries_user_date", "user_id", "created_at"),
+    )
+
+
+# ========== GUIDE CERTIFICATIONS ==========
+
+class GuideCertification(Base):
+    __tablename__ = "guide_certifications"
+
+    id = Column(Integer, primary_key=True, index=True)
+    healer_id = Column(Integer, ForeignKey("healers.id"), nullable=False, index=True)
+    category = Column(String(100))      # Mental Health / Meditation / Yoga / etc.
+    certification_name = Column(String(200))
+    issuing_authority = Column(String(200))
+    year_obtained = Column(Integer, nullable=True)
+    file_url = Column(String(500), nullable=True)
+    uploaded_at = Column(DateTime, default=datetime.utcnow)
+    verified = Column(Boolean, default=False)
+    verified_at = Column(DateTime, nullable=True)
+
+
+# ========== GUIDE AGREEMENTS ==========
+
+class GuideAgreement(Base):
+    __tablename__ = "guide_agreements"
+
+    id = Column(Integer, primary_key=True, index=True)
+    healer_id = Column(Integer, ForeignKey("healers.id"), unique=True, nullable=False)
+    guide_agreement_version = Column(String(20), default="1.0")
+
+    role_understanding_accepted = Column(Boolean, default=False)
+    independent_contractor_accepted = Column(Boolean, default=False)
+    confidentiality_accepted = Column(Boolean, default=False)
+    safety_training_completed = Column(Boolean, default=False)
+    professional_conduct_accepted = Column(Boolean, default=False)
+    employment_compliance_accepted = Column(Boolean, default=False)
+
+    qualification_status = Column(String(50), default="pending_review")
+    verification_status = Column(String(50), default="unverified")
+
+    accepted_at = Column(DateTime, default=datetime.utcnow)
+    ip_address = Column(String(45), nullable=True)
+
+
+# ========== CIRCLE MEMBERSHIPS ==========
+
+class CircleMembership(Base):
+    __tablename__ = "circle_memberships"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    meetup_id = Column(Integer, ForeignKey("meetups.id"), nullable=False, index=True)
+    role = Column(String(20), default="member")      # host / member / moderator
+    joined_at = Column(DateTime, default=datetime.utcnow)
+    is_active = Column(Boolean, default=True)
+
+    __table_args__ = (
+        Index("ix_circle_memberships_user_meetup", "user_id", "meetup_id"),
+    )
+
+
+# ========== CIRCLE ACTIVITY ==========
+
+class CircleActivity(Base):
+    __tablename__ = "circle_activity"
+
+    id = Column(Integer, primary_key=True, index=True)
+    meetup_id = Column(Integer, ForeignKey("meetups.id"), nullable=False, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    activity_type = Column(String(50))   # message / join / leave / rate / report
+    metadata = Column(JSON, default=dict)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        Index("ix_circle_activity_meetup_date", "meetup_id", "created_at"),
+    )
+
+
+# ========== SECURITY LOGS ==========
+
+class SecurityLog(Base):
+    __tablename__ = "security_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)
+    event_type = Column(String(50), nullable=False)
+    # login_success / login_failed / password_change / device_change
+    # account_recovery / suspicious_activity / data_export / account_delete
+    ip_address = Column(String(45))
+    user_agent = Column(String(500))
+    device_fingerprint = Column(String(200), nullable=True)
+    metadata = Column(JSON, default=dict)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        Index("ix_security_logs_user_date", "user_id", "created_at"),
+        Index("ix_security_logs_event", "event_type", "created_at"),
+    )
+
+
+# ========== REPORTS ==========
+
+class Report(Base):
+    __tablename__ = "reports"
+
+    id = Column(Integer, primary_key=True, index=True)
+    reporter_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)
+    reported_user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    reported_guide_id = Column(Integer, ForeignKey("healers.id"), nullable=True)
+    report_type = Column(String(20), nullable=False)   # user / guide / circle / message
+    reason = Column(String(100), nullable=False)
+    description = Column(Text, nullable=True)
+    screenshot_url = Column(String(500), nullable=True)
+    is_anonymous = Column(Boolean, default=False)
+    status = Column(String(20), default="pending")     # pending / reviewing / resolved / dismissed
+    moderator_notes = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    resolved_at = Column(DateTime, nullable=True)
+
+    __table_args__ = (
+        Index("ix_reports_status_date", "status", "created_at"),
+    )
+
+
+# ========== CRISIS ESCALATIONS ==========
+
+class CrisisEscalation(Base):
+    __tablename__ = "crisis_escalations"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    trigger_phrase = Column(String(200))
+    context = Column(String(50))    # ai_chat / peer_chat / journal / mood
+    status = Column(String(30), default="triggered")   # triggered / acknowledged / resolved
+    created_at = Column(DateTime, default=datetime.utcnow)
+    resolved_at = Column(DateTime, nullable=True)
+
+    __table_args__ = (
+        Index("ix_crisis_escalations_user_date", "user_id", "created_at"),
+    )
