@@ -9,6 +9,7 @@ load_dotenv()
 from app.routes import auth, users, matching, chats, healers, sessions, meetups, admin
 from app.routes import journey
 from app.routes import challenges
+from app.routes import dashboard
 from app.database import engine, Base
 
 
@@ -63,6 +64,7 @@ app.include_router(meetups.router, prefix="/api/meetups", tags=["Meetups"])
 app.include_router(admin.router, prefix="/api/admin", tags=["Admin"])
 app.include_router(journey.router, prefix="/api/journey", tags=["Soul Journey"])
 app.include_router(challenges.router, prefix="/api/challenges", tags=["Daily Challenges"])
+app.include_router(dashboard.router, prefix="/api/dashboard", tags=["Dashboard"])
 
 
 @app.get("/")
