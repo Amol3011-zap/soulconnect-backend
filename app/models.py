@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, Enum, ForeignKey, JSON, Text
+from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, Enum, ForeignKey, JSON, Text, Index
 from sqlalchemy.orm import relationship
 from datetime import datetime
 import enum
@@ -83,6 +83,7 @@ class User(Base):
     healer_sessions = relationship("HealerSession", back_populates="user")
     subscriptions = relationship("Subscription", back_populates="user")
     meetups = relationship("MeetupAttendee", back_populates="user")
+    journey = relationship("UserJourney", back_populates="user", uselist=False)
 
 
 # ========== MATCH MODEL ==========
@@ -275,6 +276,63 @@ class Subscription(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="subscriptions")
+
+
+# ========== SAFETY FLAG MODEL ==========
+
+# ========== SOUL JOURNEY ENUMS ==========
+
+class JourneyStageEnum(str, enum.Enum):
+    BEGINNING = "beginning"
+    HEALING = "healing"
+    GROWTH = "growth"
+    TRANSFORMATION = "transformation"
+    INNER_HARMONY = "inner_harmony"
+
+
+class ActivityTypeEnum(str, enum.Enum):
+    MEDITATION = "meditation"
+    JOURNAL = "journal"
+    CHAT_SESSION = "chat_session"
+    HEALER_BOOKING = "healer_booking"
+    CHECK_IN = "check_in"
+    REFLECTION = "reflection"
+
+
+# ========== USER JOURNEY MODEL ==========
+
+class UserJourney(Base):
+    __tablename__ = "user_journeys"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), unique=True, nullable=False)
+    current_stage = Column(Enum(JourneyStageEnum), default=JourneyStageEnum.BEGINNING)
+    joined_at = Column(DateTime, default=datetime.utcnow)
+    total_activities = Column(Integer, default=0)
+
+    user = relationship("User", back_populates="journey")
+    activities = relationship("JourneyActivity", back_populates="journey", cascade="all, delete-orphan")
+
+
+# ========== JOURNEY ACTIVITY MODEL ==========
+
+class JourneyActivity(Base):
+    __tablename__ = "journey_activities"
+
+    id = Column(Integer, primary_key=True, index=True)
+    journey_id = Column(Integer, ForeignKey("user_journeys.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    activity_type = Column(Enum(ActivityTypeEnum), nullable=False)
+    duration_minutes = Column(Integer, default=0)
+    intensity = Column(Integer, default=5)  # 1–10
+    notes = Column(Text, default="")
+    logged_at = Column(DateTime, default=datetime.utcnow)
+
+    journey = relationship("UserJourney", back_populates="activities")
+
+    __table_args__ = (
+        Index("ix_journey_activities_user_date", "user_id", "logged_at"),
+    )
 
 
 # ========== SAFETY FLAG MODEL ==========
