@@ -280,6 +280,38 @@ class Subscription(Base):
 
 # ========== SAFETY FLAG MODEL ==========
 
+# ========== DAILY CHALLENGES MODELS ==========
+
+class UserChallengeStreak(Base):
+    __tablename__ = "user_challenge_streaks"
+
+    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
+    current_streak = Column(Integer, default=0)
+    longest_streak = Column(Integer, default=0)
+    total_points = Column(Integer, default=0)
+    last_completion_date = Column(DateTime, nullable=True)
+
+    completions = relationship("UserChallengeCompletion", back_populates="streak_record", cascade="all, delete-orphan", foreign_keys="UserChallengeCompletion.user_id", primaryjoin="UserChallengeStreak.user_id == UserChallengeCompletion.user_id")
+
+
+class UserChallengeCompletion(Base):
+    __tablename__ = "user_challenge_completions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    challenge_id = Column(String, nullable=False)
+    challenge_date = Column(DateTime, nullable=False)
+    completed_at = Column(DateTime, default=datetime.utcnow)
+    actual_duration = Column(Integer, nullable=True)
+    points_earned = Column(Integer, default=0)
+
+    streak_record = relationship("UserChallengeStreak", foreign_keys=[user_id], primaryjoin="UserChallengeCompletion.user_id == UserChallengeStreak.user_id", back_populates="completions")
+
+    __table_args__ = (
+        Index("ix_challenge_completions_user_date", "user_id", "challenge_date"),
+    )
+
+
 # ========== SOUL JOURNEY ENUMS ==========
 
 class JourneyStageEnum(str, enum.Enum):
