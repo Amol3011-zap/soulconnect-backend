@@ -138,10 +138,14 @@ async def join_waitlist(
         )
         db.add(submission)
         db.commit()
+        db.refresh(submission)
+
+        if not submission.id:
+            raise RuntimeError("Insert did not return a row ID")
 
         logger.info(
-            "Waitlist signup: email=%s struggle=%s source=%s ip=%s",
-            data.email, data.struggle, data.source, ip,
+            "Waitlist signup: id=%s email=%s struggle=%s source=%s ip=%s",
+            submission.id, data.email, data.struggle, data.source, ip,
         )
 
         return WaitlistResponse(
@@ -206,3 +210,55 @@ async def get_waitlist_admin(
         }
         for r in rows
     ]
+
+
+# ─── GET /api/early-access/debug ─────────────────────────────────────────────
+# Public debug endpoint — shows last 10 rows and DB connection info
+
+@router.get("/debug")
+async def debug_waitlist(db: Session = Depends(get_db)):
+    import os
+    from sqlalchemy import text, inspect
+
+    db_url = os.getenv("DATABASE_URL", "NOT SET")
+    db_url_safe = db_url[:40] + "..." if len(db_url) > 40 else db_url
+
+    # Check if table exists
+    try:
+        inspector = inspect(db.bind)
+        tables = inspector.get_table_names()
+        table_exists = "early_access_submissions" in tables
+    except Exception as e:
+        tables = []
+        table_exists = f"error: {e}"
+
+    # Try a raw count
+    try:
+        result = db.execute(text("SELECT COUNT(*) FROM early_access_submissions"))
+        count = result.scalar()
+    except Exception as e:
+        count = f"error: {e}"
+
+    # Last 10 rows
+    try:
+        from app.models import EarlyAccessSubmission
+        rows = (
+            db.query(EarlyAccessSubmission)
+            .order_by(EarlyAccessSubmission.id.desc())
+            .limit(10)
+            .all()
+        )
+        recent = [
+            {"id": r.id, "email": r.email[:3] + "***", "struggle": r.struggle, "created_at": r.created_at.isoformat() if r.created_at else None}
+            for r in rows
+        ]
+    except Exception as e:
+        recent = f"error: {e}"
+
+    return {
+        "database_url_prefix": db_url_safe,
+        "table_exists": table_exists,
+        "all_tables": tables,
+        "row_count": count,
+        "last_10": recent,
+    }
