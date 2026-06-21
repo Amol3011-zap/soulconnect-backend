@@ -50,11 +50,16 @@ async def lifespan(app: FastAPI):
     print("SoulConnect API shutting down...")
 
 
+_debug = os.getenv("DEBUG", "False").lower() in ("true", "1")
+
 app = FastAPI(
     title="SoulConnect API",
     description="Problem-solver peer support + healer platform",
     version="1.0.0",
-    lifespan=lifespan
+    lifespan=lifespan,
+    docs_url="/docs" if _debug else None,
+    redoc_url="/redoc" if _debug else None,
+    openapi_url="/openapi.json" if _debug else None,
 )
 
 _raw_origins = os.getenv(
