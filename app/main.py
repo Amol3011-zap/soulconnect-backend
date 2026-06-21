@@ -14,6 +14,9 @@ from app.routes import analytics, consent, privacy
 from app.routes import early_access
 from app.database import engine, Base
 
+# Must import all models before create_all so SQLAlchemy registers every table
+import app.models  # noqa: F401
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
