@@ -16,11 +16,18 @@ def get_engine():
         if not db_url:
             raise RuntimeError("DATABASE_URL environment variable is not set")
         print(f"[database] Connecting to: {db_url[:50]}...")
+        # Neon PostgreSQL requires SSL
+        connect_args = {}
+        if "neon.tech" in db_url or "sslmode=require" in db_url:
+            connect_args = {"sslmode": "require"}
         _engine = create_engine(
             db_url,
             echo=False,
             pool_pre_ping=True,
-            pool_recycle=3600
+            pool_recycle=1800,
+            pool_size=5,
+            max_overflow=10,
+            connect_args=connect_args,
         )
     return _engine
 

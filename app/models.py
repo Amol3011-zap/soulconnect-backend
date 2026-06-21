@@ -609,7 +609,7 @@ class CircleActivity(Base):
     meetup_id = Column(Integer, ForeignKey("meetups.id"), nullable=False, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
     activity_type = Column(String(50))   # message / join / leave / rate / report
-    metadata = Column(JSON, default=dict)
+    extra_data = Column(JSON, default=dict)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     __table_args__ = (
@@ -630,7 +630,7 @@ class SecurityLog(Base):
     ip_address = Column(String(45))
     user_agent = Column(String(500))
     device_fingerprint = Column(String(200), nullable=True)
-    metadata = Column(JSON, default=dict)
+    extra_data = Column(JSON, default=dict)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     __table_args__ = (
@@ -678,4 +678,23 @@ class CrisisEscalation(Base):
 
     __table_args__ = (
         Index("ix_crisis_escalations_user_date", "user_id", "created_at"),
+    )
+
+
+# ========== EARLY ACCESS SUBMISSIONS ==========
+
+class EarlyAccessSubmission(Base):
+    __tablename__ = "early_access_submissions"
+
+    id            = Column(Integer, primary_key=True, index=True)
+    name          = Column(String(200), nullable=True)
+    email         = Column(String(320), nullable=False, unique=True, index=True)
+    struggle      = Column(String(100), nullable=True)   # renamed from challenge
+    challenge     = Column(String(100), nullable=True)   # kept for backward compat
+    source        = Column(String(100), default="Landing Page")
+    referral_code = Column(String(100), nullable=True)   # for future referral tracking
+    created_at    = Column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        Index("ix_early_access_created", "created_at"),
     )

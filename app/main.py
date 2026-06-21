@@ -11,6 +11,7 @@ from app.routes import journey
 from app.routes import challenges
 from app.routes import dashboard
 from app.routes import analytics, consent, privacy
+from app.routes import early_access
 from app.database import engine, Base
 
 
@@ -33,6 +34,10 @@ async def lifespan(app: FastAPI):
             conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS country VARCHAR"))
             conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS email VARCHAR"))
             conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS username VARCHAR"))
+            # Waitlist / early access columns
+            conn.execute(text("ALTER TABLE early_access_submissions ADD COLUMN IF NOT EXISTS struggle VARCHAR(100)"))
+            conn.execute(text("ALTER TABLE early_access_submissions ADD COLUMN IF NOT EXISTS referral_code VARCHAR(100)"))
+            conn.execute(text("ALTER TABLE early_access_submissions ALTER COLUMN name DROP NOT NULL"))
             conn.commit()
         print("Column migrations complete!")
     except Exception as e:
@@ -49,12 +54,18 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+_raw_origins = os.getenv(
+    "ALLOWED_ORIGINS",
+    "https://soulconnect.health,https://www.soulconnect.health"
+)
+_allowed_origins = [o.strip() for o in _raw_origins.split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=_allowed_origins,
     allow_credentials=False,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type", "X-Admin-Key"],
 )
 
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
@@ -71,6 +82,7 @@ app.include_router(dashboard.router, prefix="/api/dashboard", tags=["Dashboard"]
 app.include_router(analytics.router, prefix="/api/analytics", tags=["Analytics"])
 app.include_router(consent.router, prefix="/api/consent", tags=["Consent"])
 app.include_router(privacy.router, prefix="/api/privacy", tags=["Privacy & GDPR"])
+app.include_router(early_access.router, prefix="/api/early-access", tags=["Early Access"])
 
 
 @app.get("/")
