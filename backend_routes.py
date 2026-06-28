@@ -77,26 +77,7 @@ class LoginRequest(BaseModel):
 @router.post("/login")
 async def login(request: LoginRequest, db: Session = Depends(get_db)):
     """User Login - Phone-based authentication"""
-    
-    user = db.query(User).filter(User.phone == request.phone).first()
-    
-    if not user:
-        raise HTTPException(status_code=401, detail="User not found")
-    
-    # Update last active
-    user.last_active_at = datetime.utcnow()
-    db.commit()
-    
-    # Generate JWT token
-    access_token = AuthService.create_access_token(
-        data={"sub": str(user.id), "phone": user.phone}
-    )
-    
-    return {
-        "access_token": access_token,
-        "token_type": "bearer",
-        "user_id": user.id
-    }
+    raise HTTPException(status_code=503, detail="Login is temporarily disabled")
 
 ---
 
