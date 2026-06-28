@@ -32,44 +32,8 @@ class SignupResponse(BaseModel):
 
 @router.post("/signup", response_model=SignupResponse)
 async def signup(request: SignupRequest, db: Session = Depends(get_db)):
-    """User Signup - Create account with problem selection and location"""
-    
-    # Check if user already exists
-    existing_user = db.query(User).filter(User.phone == request.phone).first()
-    if existing_user:
-        raise HTTPException(status_code=400, detail="Phone number already registered")
-    
-    # Create new user
-    user = User(
-        phone=request.phone,
-        name=request.name,
-        primary_problem=request.primary_problem,
-        secondary_problems=request.secondary_problems,
-        latitude=request.latitude,
-        longitude=request.longitude,
-        address=request.address,
-        city=request.city,
-        timezone=request.timezone,
-        distance_preference=request.distance_preference,
-        phone_verified=True,  # In production, send OTP first
-        is_active=True
-    )
-    
-    db.add(user)
-    db.commit()
-    db.refresh(user)
-    
-    # Generate JWT token
-    access_token = AuthService.create_access_token(
-        data={"sub": str(user.id), "phone": user.phone}
-    )
-    
-    return SignupResponse(
-        id=user.id,
-        phone=user.phone,
-        name=user.name,
-        access_token=access_token
-    )
+    """User Signup - temporarily disabled"""
+    raise HTTPException(status_code=503, detail="Signup is temporarily disabled")
 
 class LoginRequest(BaseModel):
     phone: str
