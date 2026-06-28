@@ -79,6 +79,7 @@ async def signup(request: SignupRequest, db: Session = Depends(get_db)):
 
 class LoginRequest(BaseModel):
     phone: str
+    password: str = None
 
 
 @router.post("/login")
@@ -98,5 +99,9 @@ async def login(request: LoginRequest, db: Session = Depends(get_db)):
     return {
         "access_token": access_token,
         "token_type": "bearer",
-        "user_id": user.id
+        "id": user.id,
+        "user_id": user.id,
+        "name": user.name,
+        "phone": user.phone,
+        "role": user.role or "user",
     }
