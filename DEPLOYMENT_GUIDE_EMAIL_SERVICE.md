@@ -43,7 +43,7 @@ ADMIN_EMAIL=community@soulconnect.health
 
 1. Go to [Resend Dashboard](https://resend.com/dashboard)
 2. Navigate to **API Keys** section
-3. Find and **revoke** the exposed key (`re_iyT2qrs5_J7L6u51SjPSsjmvCJvfiEvw5`)
+3. Find and **revoke** any exposed API keys
 4. Generate a **new API key**
 
 ### Step 2: Update Railway Environment Variables
