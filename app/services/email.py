@@ -156,31 +156,54 @@ class ResendEmailService:
                 }}
 
                 .header {{
-                    text-align: center;
-                    padding: 0;
-                    background: linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%);
+                    background: #1a1a2e;
                     border-radius: 12px 12px 0 0;
                     color: white;
-                    min-height: 200px;
+                    padding: 30px 25px;
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
+                }}
+
+                .logo-container {{
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+                    flex: 1;
+                }}
+
+                .logo-icon {{
+                    width: 50px;
+                    height: 50px;
+                    background: white;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 28px;
+                    flex-shrink: 0;
+                }}
+
+                .logo-text {{
                     display: flex;
                     flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
+                    gap: 4px;
                 }}
 
-                .header img {{
-                    max-width: 100%;
-                    height: auto;
-                    width: 100%;
-                    border-radius: 12px 12px 0 0;
-                    display: block;
-                }}
-
-                .logo {{
-                    font-size: 28px;
+                .logo-name {{
+                    font-size: 22px;
                     font-weight: 800;
-                    margin-bottom: 10px;
-                    padding: 30px 20px;
+                    color: white;
+                    margin: 0;
+                }}
+
+                .logo-tagline {{
+                    font-size: 11px;
+                    font-weight: 600;
+                    color: #a78bfa;
+                    letter-spacing: 2px;
+                    text-transform: uppercase;
+                    margin: 0;
                 }}
 
                 .content {{
@@ -296,8 +319,13 @@ class ResendEmailService:
         <body>
             <div class="container">
                 <div class="header">
-                    <div class="logo">💜 SoulConnect</div>
-                    <p style="font-size: 14px; opacity: 0.95;">Welcome to our community</p>
+                    <div class="logo-container">
+                        <div class="logo-icon">💜</div>
+                        <div class="logo-text">
+                            <h2 class="logo-name">SoulConnect</h2>
+                            <p class="logo-tagline">Heal • Connect • Grow</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="content">
