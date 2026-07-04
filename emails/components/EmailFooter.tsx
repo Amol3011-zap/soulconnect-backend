@@ -10,31 +10,25 @@ export const EmailFooter = ({ userEmail }: EmailFooterProps) => {
     <>
       <Hr style={footerDivider} />
       <Section style={footerContainer}>
-        <table role="presentation" width="100%" cellPadding="0" cellSpacing="0">
-          <tbody>
-            <tr>
-              <td align="center" style={footerContent}>
-                <Text style={footerLogo}>💜</Text>
-                <Text style={footerWebsite}>soulconnect.health</Text>
-                <Text style={footerEmail}>
-                  <Link href="mailto:community@soulconnect.health" style={footerLink}>
-                    community@soulconnect.health
-                  </Link>
-                </Text>
-                <Text style={footerLinks}>
-                  <Link href="https://soulconnect.health/privacy" style={footerLink}>
-                    Privacy Policy
-                  </Link>
-                  {' '} · {' '}
-                  <Link href="https://soulconnect.health/terms" style={footerLink}>
-                    Terms of Service
-                  </Link>
-                </Text>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
+        <Text style={footerEmail}>
+          <Link href="mailto:community@soulconnect.health" style={footerLink}>
+            community@soulconnect.health
+          </Link>
+        </Text>
+        <Text style={footerWebsite}>
+          <Link href="https://soulconnect.health" style={footerLink}>
+            soulconnect.health
+          </Link>
+        </Text>
+        <Text style={footerLinks}>
+          <Link href="https://soulconnect.health/privacy" style={footerLink}>
+            Privacy Policy
+          </Link>
+          {' '} · {' '}
+          <Link href="https://soulconnect.health/terms" style={footerLink}>
+            Terms of Service
+          </Link>
+        </Text>
         <Text style={footerDisclaimer}>
           You're receiving this email because you joined the SoulConnect waitlist.
         </Text>
@@ -51,53 +45,41 @@ const footerDivider = {
 };
 
 const footerContainer = {
-  padding: '32px 20px',
+  padding: '16px 20px',
   backgroundColor: '#ffffff',
   textAlign: 'center' as const,
 };
 
-const footerContent = {
-  textAlign: 'center' as const,
-};
-
-const footerLogo = {
-  fontSize: '32px',
-  lineHeight: '32px',
-  margin: '0 0 12px 0',
-  display: 'block',
+const footerEmail = {
+  fontSize: '12px',
+  color: '#4a4a4a',
+  margin: '0 0 4px 0',
+  lineHeight: '1.3',
 };
 
 const footerWebsite = {
-  fontSize: '14px',
-  fontWeight: 600,
-  color: '#7C3AED',
-  margin: '0 0 8px 0',
-  lineHeight: '1.4',
-};
-
-const footerEmail = {
-  fontSize: '14px',
+  fontSize: '12px',
   color: '#4a4a4a',
-  margin: '0 0 12px 0',
-  lineHeight: '1.4',
+  margin: '0 0 8px 0',
+  lineHeight: '1.3',
 };
 
 const footerLinks = {
-  fontSize: '13px',
+  fontSize: '11px',
   color: '#4a4a4a',
-  margin: '12px 0 24px 0',
-  lineHeight: '1.4',
+  margin: '0 0 8px 0',
+  lineHeight: '1.3',
 };
 
 const footerLink = {
-  color: '#7C3AED',
+  color: '#4B2E83',
   textDecoration: 'none',
   fontWeight: 500,
 };
 
 const footerDisclaimer = {
-  fontSize: '12px',
+  fontSize: '11px',
   color: '#999999',
   margin: '0',
-  lineHeight: '1.5',
+  lineHeight: '1.4',
 };

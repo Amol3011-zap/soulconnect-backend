@@ -8,13 +8,10 @@ export const EmailHeader = () => {
         <tbody>
           <tr>
             <td style={headerContent} align="center">
-              <Text style={logoContainer}>
-                <span style={logoIcon}>💜</span>
-              </Text>
+              <Text style={logoIcon}>💜</Text>
               <Text style={logoText}>
                 Soul<span style={logoAccent}>Connect</span>
               </Text>
-              <Text style={tagline}>HEAL • CONNECT • GROW • TOGETHER.</Text>
             </td>
           </tr>
         </tbody>
@@ -25,8 +22,8 @@ export const EmailHeader = () => {
 };
 
 const headerContainer = {
-  backgroundColor: '#3e1c52',
-  padding: '40px 20px 24px',
+  backgroundColor: '#4B2E83',
+  padding: '20px 20px 16px',
   width: '100%',
 };
 
@@ -37,45 +34,30 @@ const headerTable = {
 
 const headerContent = {
   textAlign: 'center' as const,
-  paddingBottom: '16px',
-};
-
-const logoContainer = {
-  fontSize: '48px',
-  lineHeight: '48px',
-  margin: '0 0 12px 0',
-  display: 'block',
 };
 
 const logoIcon = {
-  fontSize: '48px',
+  fontSize: '32px',
+  lineHeight: '32px',
+  margin: '0 0 6px 0',
+  display: 'block',
 };
 
 const logoText = {
-  fontSize: '32px',
+  fontSize: '26px',
   fontWeight: 800,
   color: '#ffffff',
-  margin: '0 0 8px 0',
+  margin: '0',
   lineHeight: '1',
-  letterSpacing: '-0.5px',
+  letterSpacing: '-0.3px',
 };
 
 const logoAccent = {
-  color: '#EAB308',
-};
-
-const tagline = {
-  fontSize: '11px',
-  fontWeight: 700,
-  color: '#d4af37',
-  margin: '0',
-  letterSpacing: '1.5px',
-  textTransform: 'uppercase',
-  lineHeight: '1.2',
+  color: '#D4AF37',
 };
 
 const headerDivider = {
-  borderColor: '#EAB308',
+  borderColor: '#D4AF37',
   borderWidth: '2px',
   borderStyle: 'solid',
   margin: '0',

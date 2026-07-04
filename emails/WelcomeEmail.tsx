@@ -6,16 +6,12 @@ import {
   Head,
   Hr,
   Html,
-  Img,
   Link,
   Preview,
-  Row,
   Section,
   Text,
 } from 'react-email';
 import { EmailHeader } from './components/EmailHeader';
-import { FeatureCard } from './components/FeatureCard';
-import { MomentOfCalm } from './components/MomentOfCalm';
 import { EmailFooter } from './components/EmailFooter';
 import { getFirstName } from './helpers/getFirstName';
 
@@ -34,33 +30,27 @@ export const WelcomeEmail = ({ userEmail, userName }: WelcomeEmailProps) => {
         <meta name="color-scheme" content="light dark" />
         <meta name="supported-color-schemes" content="light dark" />
         <style>{`
-          .dark {
-            color-scheme: dark;
-          }
           @media (prefers-color-scheme: dark) {
-            .dark-mode-text { color: #e5e5e5; }
-            .dark-mode-secondary { color: #a0a0a0; }
-            .dark-mode-bg { background-color: #1a1a1a; }
-            .dark-mode-card { background-color: #262626; }
-            .dark-mode-border { border-color: #404040; }
+            .dark-text { color: #e5e5e5; }
+            .dark-secondary { color: #a0a0a0; }
           }
         `}</style>
       </Head>
-      <Preview>{`Thank you for joining our community. We're glad you're here.`}</Preview>
+      <Preview>Thank you for joining the SoulConnect waitlist</Preview>
       <Body style={main}>
         <Container style={container}>
-          {/* Header */}
+          {/* Header - Compact */}
           <EmailHeader />
 
-          {/* Hero Section */}
-          <Section style={heroSection}>
-            <Text style={heroIcon}>💜</Text>
-            <Text style={heading1}>Welcome to SoulConnect!</Text>
+          {/* Welcome Section - Minimal */}
+          <Section style={welcomeSection}>
+            <Text style={welcomeIcon}>💜</Text>
+            <Text style={welcomeTitle}>Welcome to SoulConnect</Text>
             <Text style={greeting}>Hi {firstName}! 👋</Text>
-            <Text style={heroText}>
-              Thank you for joining our waitlist.
+            <Text style={bodyText}>
+              Thank you for joining the SoulConnect waitlist.
             </Text>
-            <Text style={heroText}>
+            <Text style={bodyText}>
               You're now part of a community built on one simple belief.
             </Text>
             <Text style={quote}>
@@ -68,71 +58,35 @@ export const WelcomeEmail = ({ userEmail, userName }: WelcomeEmailProps) => {
             </Text>
           </Section>
 
-          {/* Features Section */}
-          <Section style={featuresSection}>
-            <Text style={sectionHeading}>Here's what you'll discover</Text>
-
-            <Row style={cardsRow}>
-              <FeatureCard
-                icon="🤝"
-                title="Connect"
-                description="Find people who truly understand what you're going through."
-              />
-              <FeatureCard
-                icon="🌱"
-                title="Heal"
-                description="Daily wellness tools and guided healing journeys."
-              />
-            </Row>
-
-            <Row style={cardsRow}>
-              <FeatureCard
-                icon="🧠"
-                title="Professional Support"
-                description="Connect with trusted therapists and wellness professionals."
-              />
-              <FeatureCard
-                icon="💜"
-                title="Grow"
-                description="Build healthier habits and become your best self."
-              />
-            </Row>
+          {/* What You'll Get - Compact List */}
+          <Section style={whatSection}>
+            <Text style={sectionLabel}>What you'll get</Text>
+            <table role="presentation" cellPadding="0" cellSpacing="0" width="100%" style={checklistTable}>
+              <tbody>
+                <tr>
+                  <td style={checklistItemStyle}>
+                    <Text style={checkItem}>✔ Connect with people who understand</Text>
+                  </td>
+                </tr>
+                <tr>
+                  <td style={checklistItemStyle}>
+                    <Text style={checkItem}>✔ Daily wellness support</Text>
+                  </td>
+                </tr>
+                <tr>
+                  <td style={checklistItemStyle}>
+                    <Text style={checkItem}>✔ Access to trusted professionals</Text>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </Section>
 
-          {/* Building Section */}
-          <Section style={buildingSection}>
-            <Text style={sectionHeading}>We're building SoulConnect for you</Text>
-
-            <div style={checklistContainer}>
-              <div style={checklistItem}>
-                <Text style={checklistText}>✔ Anonymous peer matching</Text>
-              </div>
-              <div style={checklistItem}>
-                <Text style={checklistText}>✔ Guided healing journeys</Text>
-              </div>
-              <div style={checklistItem}>
-                <Text style={checklistText}>✔ Verified professionals</Text>
-              </div>
-              <div style={checklistItem}>
-                <Text style={checklistText}>✔ Safe supportive community</Text>
-              </div>
-              <div style={checklistItem}>
-                <Text style={checklistText}>✔ Mood tracking</Text>
-              </div>
-              <div style={checklistItem}>
-                <Text style={checklistText}>✔ Daily check-ins</Text>
-              </div>
-              <div style={checklistItem}>
-                <Text style={checklistText}>✔ Breathing exercises</Text>
-              </div>
-            </div>
-          </Section>
-
-          {/* CTA Section */}
+          {/* CTA - Single Button */}
           <Section style={ctaSection}>
             <Button
-              pX={40}
-              pY={16}
+              pX={32}
+              pY={12}
               style={ctaButton}
               href="https://soulconnect.health"
             >
@@ -140,36 +94,32 @@ export const WelcomeEmail = ({ userEmail, userName }: WelcomeEmailProps) => {
             </Button>
           </Section>
 
-          {/* Moment of Calm */}
-          <MomentOfCalm />
-
-          {/* Closing */}
+          {/* Closing - Brief */}
           <Section style={closingSection}>
-            <Text style={closingIcon}>💜</Text>
-            <Text style={closingMessage}>
-              One genuine conversation can change someone's day.
+            <Text style={closingText}>
+              We'll let you know as soon as early access is available.
             </Text>
-            <Text style={closingMessage}>
-              Thank you for believing in ours.
+            <Text style={closingText}>
+              Take care of yourself.
             </Text>
-            <Text style={closingSignature}>With care,</Text>
-            <Text style={closingSignatureTeam}>The SoulConnect Team</Text>
+            <Text style={heartIcon}>💜</Text>
+            <Text style={teamName}>The SoulConnect Team</Text>
           </Section>
 
-          {/* Footer */}
+          {/* Footer - Minimal */}
           <EmailFooter userEmail={userEmail} />
         </Container>
 
-        {/* VML Fallback for Outlook Button */}
+        {/* VML Fallback for Outlook */}
         <div dangerouslySetInnerHTML={{
           __html: `<!--[if mso]>
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
               <tr>
-                <td style="padding: 40px 0;">
+                <td style="padding: 24px 0;">
                   <table role="presentation" align="center" cellspacing="0" cellpadding="0" border="0">
                     <tr>
-                      <td style="border-radius: 6px; background: linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%); padding: 16px 40px;">
-                        <a href="https://soulconnect.health" style="color: white; text-decoration: none; font-weight: 600; display: block; font-size: 16px;">Visit SoulConnect</a>
+                      <td style="border-radius: 6px; background: #4B2E83; padding: 12px 32px;">
+                        <a href="https://soulconnect.health" style="color: white; text-decoration: none; font-weight: 600; display: block; font-size: 15px;">Visit SoulConnect</a>
                       </td>
                     </tr>
                   </table>
@@ -189,6 +139,141 @@ WelcomeEmail.PreviewProps = {
 };
 
 export default WelcomeEmail;
+
+// Optimized Styles
+const main = {
+  backgroundColor: '#ffffff',
+  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
+};
+
+const container = {
+  maxWidth: '600px',
+  margin: '0 auto',
+  width: '100%',
+};
+
+const welcomeSection = {
+  padding: '32px 24px',
+  textAlign: 'center' as const,
+};
+
+const welcomeIcon = {
+  fontSize: '40px',
+  lineHeight: '40px',
+  margin: '0 0 12px 0',
+  display: 'block',
+  textAlign: 'center' as const,
+};
+
+const welcomeTitle = {
+  fontSize: '28px',
+  fontWeight: 700,
+  color: '#1a1a1a',
+  margin: '0 0 8px 0',
+  lineHeight: '1.2',
+};
+
+const greeting = {
+  fontSize: '16px',
+  fontWeight: 600,
+  color: '#1a1a1a',
+  margin: '0 0 16px 0',
+  lineHeight: '1.4',
+};
+
+const bodyText = {
+  fontSize: '15px',
+  color: '#4a4a4a',
+  margin: '8px 0',
+  lineHeight: '1.5',
+};
+
+const quote = {
+  fontSize: '16px',
+  fontStyle: 'italic',
+  color: '#4B2E83',
+  fontWeight: 600,
+  margin: '16px 0 0 0',
+  lineHeight: '1.6',
+};
+
+const whatSection = {
+  padding: '24px 24px 32px 24px',
+  backgroundColor: '#ffffff',
+  textAlign: 'center' as const,
+};
+
+const sectionLabel = {
+  fontSize: '14px',
+  fontWeight: 600,
+  color: '#4B2E83',
+  margin: '0 0 12px 0',
+  textTransform: 'uppercase',
+  letterSpacing: '0.5px',
+  lineHeight: '1.4',
+};
+
+const checklistTable = {
+  margin: '0 auto',
+};
+
+const checklistItemStyle = {
+  padding: '6px 0',
+  textAlign: 'left' as const,
+};
+
+const checkItem = {
+  fontSize: '14px',
+  color: '#1a1a1a',
+  margin: '0',
+  lineHeight: '1.5',
+};
+
+const ctaSection = {
+  padding: '24px 24px',
+  textAlign: 'center' as const,
+};
+
+const ctaButton = {
+  backgroundColor: '#4B2E83',
+  color: '#ffffff',
+  fontSize: '15px',
+  fontWeight: 600,
+  borderRadius: '6px',
+  textDecoration: 'none',
+  display: 'inline-block',
+  mso: {
+    padding: '12px 32px',
+  },
+};
+
+const closingSection = {
+  padding: '24px 24px',
+  textAlign: 'center' as const,
+};
+
+const closingText = {
+  fontSize: '14px',
+  color: '#4a4a4a',
+  margin: '8px 0',
+  lineHeight: '1.5',
+};
+
+const heartIcon = {
+  fontSize: '24px',
+  lineHeight: '24px',
+  margin: '12px 0 0 0',
+  display: 'block',
+  textAlign: 'center' as const,
+};
+
+const teamName = {
+  fontSize: '14px',
+  color: '#4B2E83',
+  fontWeight: 600,
+  margin: '8px 0 0 0',
+  lineHeight: '1.4',
+};
 
 // Styles
 const main = {
