@@ -38,11 +38,10 @@ const headerContent = {
 };
 
 const logoImage = {
-  maxWidth: '100%',
+  width: '100%',
   height: 'auto',
-  width: '280px',
   display: 'block',
-  margin: '0 auto',
+  margin: '0',
 };
 
 const headerDivider = {
