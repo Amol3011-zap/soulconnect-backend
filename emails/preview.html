@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to SoulConnect - Email Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #3e1c52;
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .logo-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .logo-name {
+            font-size: 32px;
+            font-weight: 800;
+            margin: 0 0 8px 0;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-accent {
+            color: #EAB308;
+        }
+
+        .tagline {
+            font-size: 11px;
+            font-weight: 700;
+            color: #d4af37;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .header-divider {
+            height: 2px;
+            background-color: #EAB308;
+            border: none;
+            margin: 0;
+        }
+
+        .content {
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .hero-icon {
+            font-size: 48px;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 0 0 16px 0;
+        }
+
+        .greeting {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin: 0 0 24px 0;
+        }
+
+        .hero-text {
+            font-size: 16px;
+            color: #4a4a4a;
+            margin: 12px 0;
+            line-height: 1.6;
+        }
+
+        .quote {
+            font-size: 18px;
+            font-style: italic;
+            color: #7C3AED;
+            font-weight: 600;
+            margin: 32px 0;
+        }
+
+        .section-heading {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 0 0 32px 0;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #e5e5e5;
+            border-radius: 12px;
+            padding: 24px 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            text-align: center;
+        }
+
+        .card-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin: 0 0 8px 0;
+        }
+
+        .card-description {
+            font-size: 14px;
+            color: #4a4a4a;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .building-section {
+            padding: 40px 20px;
+            background-color: #f9f5ff;
+        }
+
+        .checklist {
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #e5e5e5;
+            text-align: left;
+        }
+
+        .checklist-item {
+            margin: 12px 0;
+        }
+
+        .checklist-text {
+            font-size: 15px;
+            color: #1a1a1a;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .cta-section {
+            padding: 40px 20px;
+            text-align: center;
+            background-color: #ffffff;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 16px 40px;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(124, 58, 237, 0.3);
+        }
+
+        .calm-section {
+            padding: 40px 20px;
+            background-color: #ffffff;
+        }
+
+        .calm-card {
+            border: 1px solid #e5e5e5;
+            border-radius: 12px;
+            background-color: #fafaf9;
+            padding: 32px 24px;
+            text-align: center;
+        }
+
+        .calm-heading {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin: 0 0 20px 0;
+        }
+
+        .calm-text {
+            font-size: 15px;
+            color: #4a4a4a;
+            margin: 8px 0;
+        }
+
+        .calm-reminder {
+            font-size: 15px;
+            color: #7C3AED;
+            font-weight: 600;
+            margin: 20px 0 0 0;
+        }
+
+        .closing-section {
+            padding: 40px 20px;
+            text-align: center;
+            background-color: #ffffff;
+        }
+
+        .closing-icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .closing-message {
+            font-size: 16px;
+            color: #4a4a4a;
+            margin: 12px 0;
+        }
+
+        .closing-signature {
+            font-size: 15px;
+            color: #7C3AED;
+            font-weight: 600;
+            margin: 24px 0 4px 0;
+        }
+
+        .closing-team {
+            font-size: 15px;
+            color: #7C3AED;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: #e5e5e5;
+            border: none;
+            margin: 20px 0;
+        }
+
+        .website-url {
+            text-align: center;
+            color: #7C3AED;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        .footer {
+            padding: 32px 20px;
+            background-color: #ffffff;
+            text-align: center;
+            border-top: 1px solid #e5e5e5;
+        }
+
+        .footer-logo {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .footer-website {
+            font-size: 14px;
+            font-weight: 600;
+            color: #7C3AED;
+            margin: 0 0 8px 0;
+        }
+
+        .footer-email {
+            font-size: 14px;
+            color: #4a4a4a;
+            margin: 0 0 12px 0;
+        }
+
+        .footer-email a {
+            color: #7C3AED;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer-links {
+            font-size: 13px;
+            color: #4a4a4a;
+            margin: 12px 0 24px 0;
+        }
+
+        .footer-links a {
+            color: #7C3AED;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer-disclaimer {
+            font-size: 12px;
+            color: #999999;
+            margin: 0;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .section-heading {
+                font-size: 20px;
+            }
+
+            .content {
+                padding: 40px 20px;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #1a1a1a;
+            }
+
+            .container {
+                background-color: #262626;
+            }
+
+            .content, .cta-section, .closing-section, .footer {
+                background-color: #262626;
+            }
+
+            h1, .greeting, .card-title, .calm-heading, .checklist-text, .section-heading {
+                color: #e5e5e5;
+            }
+
+            .hero-text, .calm-text, .closing-message, .card-description, .footer-email, .footer-links, .footer-disclaimer {
+                color: #a0a0a0;
+            }
+
+            .card {
+                background-color: #1a1a1a;
+                border-color: #404040;
+            }
+
+            .checklist {
+                background-color: #1a1a1a;
+                border-color: #404040;
+            }
+
+            .calm-card {
+                background-color: #1a1a1a;
+                border-color: #404040;
+            }
+
+            .building-section {
+                background-color: #1a1a1a;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-icon">💜</div>
+            <div class="logo-name">Soul<span class="logo-accent">Connect</span></div>
+            <div class="tagline">HEAL • CONNECT • GROW • TOGETHER.</div>
+        </div>
+        <hr class="header-divider">
+
+        <!-- Hero Section -->
+        <div class="content">
+            <div class="hero-icon">💜</div>
+            <h1>Welcome to SoulConnect!</h1>
+            <div class="greeting">Hi Amol! 👋</div>
+            <div class="hero-text">Thank you for joining our waitlist.</div>
+            <div class="hero-text">You're now part of a community built on one simple belief.</div>
+            <div class="quote">"You don't have to go through life's challenges alone."</div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="content">
+            <div class="section-heading">Here's what you'll discover</div>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">🤝</div>
+                    <div class="card-title">Connect</div>
+                    <div class="card-description">Find people who truly understand what you're going through.</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🌱</div>
+                    <div class="card-title">Heal</div>
+                    <div class="card-description">Daily wellness tools and guided healing journeys.</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🧠</div>
+                    <div class="card-title">Professional Support</div>
+                    <div class="card-description">Connect with trusted therapists and wellness professionals.</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💜</div>
+                    <div class="card-title">Grow</div>
+                    <div class="card-description">Build healthier habits and become your best self.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Building Section -->
+        <div class="building-section">
+            <div class="section-heading">We're building SoulConnect for you</div>
+            <div class="checklist">
+                <div class="checklist-item">
+                    <div class="checklist-text">✔ Anonymous peer matching</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-text">✔ Guided healing journeys</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-text">✔ Verified professionals</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-text">✔ Safe supportive community</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-text">✔ Mood tracking</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-text">✔ Daily check-ins</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-text">✔ Breathing exercises</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <a href="https://soulconnect.health" class="cta-button">Visit SoulConnect</a>
+        </div>
+
+        <!-- Moment of Calm -->
+        <div class="calm-section">
+            <div class="calm-card">
+                <div class="calm-heading">🌿 Today's Moment of Calm</div>
+                <div class="calm-text">Take one slow breath.</div>
+                <div class="calm-text">Inhale for 4 seconds.</div>
+                <div class="calm-text">Hold for 4 seconds.</div>
+                <div class="calm-text">Exhale for 6 seconds.</div>
+                <div class="calm-text">Repeat three times.</div>
+                <div class="calm-reminder">Remember... You don't have to go through it alone.</div>
+            </div>
+        </div>
+
+        <!-- Closing -->
+        <div class="closing-section">
+            <div class="closing-icon">💜</div>
+            <div class="closing-message">One genuine conversation can change someone's day.</div>
+            <div class="closing-message">Thank you for believing in ours.</div>
+            <div class="closing-signature">With care,</div>
+            <div class="closing-team">The SoulConnect Team</div>
+            <hr class="divider">
+            <div class="website-url">https://soulconnect.health</div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-logo">💜</div>
+            <div class="footer-website">soulconnect.health</div>
+            <div class="footer-email">
+                <a href="mailto:community@soulconnect.health">community@soulconnect.health</a>
+            </div>
+            <div class="footer-links">
+                <a href="https://soulconnect.health/privacy">Privacy Policy</a>
+                ·
+                <a href="https://soulconnect.health/terms">Terms of Service</a>
+            </div>
+            <div class="footer-disclaimer">
+                You're receiving this email because you joined the SoulConnect waitlist.
+            </div>
+        </div>
+    </div>
+</body>
+</html>
