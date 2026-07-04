@@ -159,55 +159,58 @@ class ResendEmailService:
                     background: #1a1a2e;
                     border-radius: 12px 12px 0 0;
                     color: white;
-                    padding: 30px 25px;
+                    padding: 25px 30px;
                     display: flex;
                     align-items: center;
-                    gap: 20px;
+                    gap: 18px;
                 }}
 
                 .logo-container {{
                     display: flex;
                     align-items: center;
-                    gap: 15px;
-                    flex: 1;
+                    gap: 18px;
                 }}
 
                 .logo-icon {{
-                    width: 50px;
-                    height: 50px;
+                    width: 55px;
+                    height: 55px;
                     background: white;
-                    border-radius: 8px;
+                    border-radius: 10px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-size: 28px;
+                    font-size: 32px;
                     flex-shrink: 0;
                 }}
 
                 .logo-text {{
                     display: flex;
                     flex-direction: column;
-                    gap: 4px;
+                    gap: 2px;
                 }}
 
                 .logo-name {{
-                    font-size: 22px;
+                    font-size: 24px;
                     font-weight: 800;
                     color: white;
                     margin: 0;
+                    line-height: 1.1;
                 }}
 
                 .logo-tagline {{
-                    font-size: 11px;
-                    font-weight: 600;
+                    font-size: 10px;
+                    font-weight: 700;
                     color: #a78bfa;
-                    letter-spacing: 2px;
+                    letter-spacing: 1px;
                     text-transform: uppercase;
                     margin: 0;
+                    line-height: 1.2;
+                    white-space: nowrap;
                 }}
 
                 .content {{
-                    padding: 40px 30px;
+                    padding: 35px 30px;
+                    background: white;
                 }}
 
                 .greeting {{
