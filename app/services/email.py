@@ -39,7 +39,7 @@ class ResendEmailService:
 
             response = httpx.post(
                 "https://api.resend.com/emails",
-                auth=("Bearer", self.api_key),
+                headers={"Authorization": f"Bearer {self.api_key}"},
                 json={
                     "from": f"SoulConnect <{self.from_email}>",
                     "to": user_email,
@@ -98,7 +98,7 @@ class ResendEmailService:
 
             response = httpx.post(
                 "https://api.resend.com/emails",
-                auth=("Bearer", self.api_key),
+                headers={"Authorization": f"Bearer {self.api_key}"},
                 json={
                     "from": f"SoulConnect <{self.from_email}>",
                     "to": self.admin_email,
