@@ -28,34 +28,24 @@
             overflow: hidden;
         }
 
-        /* Compact Header - 120px height */
+        /* Compact Header - With Logo Image */
         .header {
-            background: #4B2E83;
+            background: #1a1a3e;
             color: white;
-            padding: 20px 20px 16px;
+            padding: 24px 20px 16px;
             text-align: center;
         }
 
-        .logo-icon {
-            font-size: 32px;
-            margin-bottom: 6px;
-            line-height: 32px;
-        }
-
-        .logo-name {
-            font-size: 26px;
-            font-weight: 800;
-            margin: 0;
-            letter-spacing: -0.3px;
-            line-height: 1;
-        }
-
-        .logo-accent {
-            color: #D4AF37;
+        .logo-image {
+            max-width: 100%;
+            width: 280px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
         }
 
         .header-divider {
-            height: 2px;
+            height: 3px;
             background-color: #D4AF37;
             border: none;
             margin: 0;
@@ -279,10 +269,9 @@
 </head>
 <body>
     <div class="container">
-        <!-- Compact Header -->
+        <!-- Header with Logo Image -->
         <div class="header">
-            <div class="logo-icon">💜</div>
-            <div class="logo-name">Soul<span class="logo-accent">Connect</span></div>
+            <img src="email.png" alt="SoulConnect" class="logo-image">
         </div>
         <hr class="header-divider">
 

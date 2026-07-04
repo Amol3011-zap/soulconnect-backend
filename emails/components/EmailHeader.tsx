@@ -1,5 +1,5 @@
 import React from 'react';
-import { Section, Text, Hr } from 'react-email';
+import { Section, Text, Hr, Img } from 'react-email';
 
 export const EmailHeader = () => {
   return (
@@ -8,10 +8,11 @@ export const EmailHeader = () => {
         <tbody>
           <tr>
             <td style={headerContent} align="center">
-              <Text style={logoIcon}>💜</Text>
-              <Text style={logoText}>
-                Soul<span style={logoAccent}>Connect</span>
-              </Text>
+              <Img
+                src="https://raw.githubusercontent.com/Amol3011-zap/soulconnect-backend/main/emails/email.png"
+                alt="SoulConnect"
+                style={logoImage}
+              />
             </td>
           </tr>
         </tbody>
@@ -22,8 +23,8 @@ export const EmailHeader = () => {
 };
 
 const headerContainer = {
-  backgroundColor: '#4B2E83',
-  padding: '20px 20px 16px',
+  backgroundColor: '#1a1a3e',
+  padding: '24px 20px 16px',
   width: '100%',
 };
 
@@ -36,29 +37,17 @@ const headerContent = {
   textAlign: 'center' as const,
 };
 
-const logoIcon = {
-  fontSize: '32px',
-  lineHeight: '32px',
-  margin: '0 0 6px 0',
+const logoImage = {
+  maxWidth: '100%',
+  height: 'auto',
+  width: '280px',
   display: 'block',
-};
-
-const logoText = {
-  fontSize: '26px',
-  fontWeight: 800,
-  color: '#ffffff',
-  margin: '0',
-  lineHeight: '1',
-  letterSpacing: '-0.3px',
-};
-
-const logoAccent = {
-  color: '#D4AF37',
+  margin: '0 auto',
 };
 
 const headerDivider = {
   borderColor: '#D4AF37',
-  borderWidth: '2px',
+  borderWidth: '3px',
   borderStyle: 'solid',
   margin: '0',
 };
