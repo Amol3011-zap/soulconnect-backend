@@ -28,12 +28,12 @@
             overflow: hidden;
         }
 
-        /* Compact Header - With Logo Image */
+        /* Perfect Header - With Logo Image */
         .header {
-            background: #1a1a3e;
-            color: white;
-            padding: 24px 20px 16px;
+            background: #ffffff;
+            padding: 0;
             text-align: center;
+            margin: 0;
         }
 
         .logo-image {
@@ -41,13 +41,19 @@
             height: auto;
             display: block;
             margin: 0;
+            padding: 0;
+            line-height: 0;
+            font-size: 0;
+            border: none;
         }
 
-        .header-divider {
-            height: 3px;
+        .header-border {
+            height: 4px;
             background-color: #D4AF37;
             border: none;
             margin: 0;
+            padding: 0;
+            display: block;
         }
 
         /* Welcome Section - Compact */
@@ -271,8 +277,8 @@
         <!-- Header with Logo Image -->
         <div class="header">
             <img src="email.png" alt="SoulConnect" class="logo-image">
+            <div class="header-border"></div>
         </div>
-        <hr class="header-divider">
 
         <!-- Welcome Section -->
         <div class="welcome-section">

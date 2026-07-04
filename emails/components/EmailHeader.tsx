@@ -1,13 +1,13 @@
 import React from 'react';
-import { Section, Text, Hr, Img } from 'react-email';
+import { Section, Img } from 'react-email';
 
 export const EmailHeader = () => {
   return (
     <Section style={headerContainer}>
-      <table role="presentation" width="100%" cellPadding="0" cellSpacing="0" style={headerTable}>
+      <table role="presentation" width="100%" cellPadding="0" cellSpacing="0" border="0">
         <tbody>
           <tr>
-            <td style={headerContent} align="center">
+            <td style={headerImageCell}>
               <Img
                 src="https://raw.githubusercontent.com/Amol3011-zap/soulconnect-backend/main/emails/email.png"
                 alt="SoulConnect"
@@ -15,25 +15,27 @@ export const EmailHeader = () => {
               />
             </td>
           </tr>
+          <tr>
+            <td style={headerBorder} height="4"></td>
+          </tr>
         </tbody>
       </table>
-      <Hr style={headerDivider} />
     </Section>
   );
 };
 
 const headerContainer = {
-  backgroundColor: '#1a1a3e',
-  padding: '24px 20px 16px',
+  padding: '0',
   width: '100%',
+  backgroundColor: '#ffffff',
+  margin: '0',
 };
 
-const headerTable = {
-  width: '100%',
-  textAlign: 'center' as const,
-};
-
-const headerContent = {
+const headerImageCell = {
+  padding: '0',
+  margin: '0',
+  lineHeight: '0',
+  fontSize: '0',
   textAlign: 'center' as const,
 };
 
@@ -42,11 +44,16 @@ const logoImage = {
   height: 'auto',
   display: 'block',
   margin: '0',
+  padding: '0',
+  lineHeight: '0',
+  fontSize: '0',
+  border: 'none',
 };
 
-const headerDivider = {
-  borderColor: '#D4AF37',
-  borderWidth: '3px',
-  borderStyle: 'solid',
+const headerBorder = {
+  backgroundColor: '#D4AF37',
+  height: '4px',
+  padding: '0',
   margin: '0',
+  display: 'block',
 };
