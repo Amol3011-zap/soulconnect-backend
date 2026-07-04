@@ -176,11 +176,12 @@ class ResendEmailService:
                     height: 55px;
                     background: white;
                     border-radius: 10px;
-                    display: flex;
+                    display: inline-flex;
                     align-items: center;
                     justify-content: center;
                     font-size: 32px;
-                    flex-shrink: 0;
+                    line-height: 55px;
+                    text-align: center;
                 }}
 
                 .logo-text {{
@@ -322,13 +323,19 @@ class ResendEmailService:
         <body>
             <div class="container">
                 <div class="header">
-                    <div class="logo-container">
-                        <div class="logo-icon">💜</div>
-                        <div class="logo-text">
-                            <h2 class="logo-name">SoulConnect</h2>
-                            <p class="logo-tagline">Heal • Connect • Grow</p>
-                        </div>
-                    </div>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="width: 60px; text-align: center; vertical-align: middle; padding-right: 15px;">
+                                <div class="logo-icon">💜</div>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <div class="logo-text">
+                                    <h2 class="logo-name">SoulConnect</h2>
+                                    <p class="logo-tagline">HEAL • CONNECT • GROW</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
 
                 <div class="content">
