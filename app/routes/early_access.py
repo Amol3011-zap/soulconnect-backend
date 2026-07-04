@@ -9,6 +9,7 @@ from pydantic import BaseModel, EmailStr, field_validator
 from typing import Optional
 
 from app.database import get_db
+from app.services.email import get_email_service
 
 router = APIRouter()
 logger = logging.getLogger("waitlist")
@@ -123,8 +124,8 @@ async def join_waitlist(
         if existing:
             logger.info("Duplicate waitlist: %s", data.email)
             return WaitlistResponse(
-                success=False,
-                message="Email already registered",
+                success=True,
+                message="You're already on the SoulConnect waitlist 💜",
             )
 
         submission = EarlyAccessSubmission(
@@ -147,6 +148,31 @@ async def join_waitlist(
             "Waitlist signup: id=%s email=%s struggle=%s source=%s ip=%s",
             submission.id, data.email, data.struggle, data.source, ip,
         )
+
+        # ─── Send emails (failures logged but don't break signup) ───────────────
+        email_service = get_email_service()
+
+        # Welcome email
+        try:
+            email_service.send_welcome_email(
+                user_email=data.email,
+                user_name=data.name,
+            )
+        except Exception as e:
+            logger.error("Failed to send welcome email to %s: %s", data.email, str(e))
+
+        # Admin notification
+        try:
+            user_agent = request.headers.get("user-agent", "")
+            email_service.send_admin_notification(
+                user_email=data.email,
+                user_name=data.name,
+                struggle=data.struggle,
+                ip_address=ip,
+                user_agent=user_agent,
+            )
+        except Exception as e:
+            logger.error("Failed to send admin notification for %s: %s", data.email, str(e))
 
         return WaitlistResponse(
             success=True,
