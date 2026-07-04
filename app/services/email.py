@@ -157,16 +157,30 @@ class ResendEmailService:
 
                 .header {{
                     text-align: center;
-                    padding: 30px 20px;
+                    padding: 0;
                     background: linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%);
                     border-radius: 12px 12px 0 0;
                     color: white;
+                    min-height: 200px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                }}
+
+                .header img {{
+                    max-width: 100%;
+                    height: auto;
+                    width: 100%;
+                    border-radius: 12px 12px 0 0;
+                    display: block;
                 }}
 
                 .logo {{
                     font-size: 28px;
                     font-weight: 800;
                     margin-bottom: 10px;
+                    padding: 30px 20px;
                 }}
 
                 .content {{
@@ -287,41 +301,46 @@ class ResendEmailService:
                 </div>
 
                 <div class="content">
-                    <div class="greeting">Hi {user_name},</div>
+                    <div class="greeting">👋 Hi {user_name}!</div>
 
                     <div class="message">
-                        Thank you for joining the <span class="highlight">SoulConnect waitlist</span>.
+                        <strong>Welcome to the SoulConnect community!</strong> 💜
                     </div>
 
                     <div class="message">
-                        You're now part of a community built on one simple belief:
+                        Thank you for joining us. You're now part of a growing community dedicated to peer support, healing, and personal growth.
                     </div>
 
-                    <div class="message" style="text-align: center; font-style: italic; color: #7C3AED; font-weight: 600; margin: 30px 0; font-size: 15px;">
+                    <div class="message" style="text-align: center; font-style: italic; color: #7C3AED; font-weight: 600; margin: 25px 0; font-size: 16px; line-height: 1.8;">
                         "No one should have to go through life's challenges alone."
                     </div>
 
                     <div class="benefits">
-                        <div class="benefits-title">We're building a place where you can:</div>
-                        <div class="benefit-item">Connect with others who truly understand</div>
-                        <div class="benefit-item">Build small daily wellness habits</div>
-                        <div class="benefit-item">Find professional support when you need it</div>
+                        <div class="benefits-title">✨ What's Coming:</div>
+                        <div class="benefit-item">Anonymous peer matching for your specific struggles</div>
+                        <div class="benefit-item">Guided healing journeys tailored to your needs</div>
+                        <div class="benefit-item">Access to verified healers and wellness professionals</div>
+                        <div class="benefit-item">Support circles in 50+ Indian cities</div>
                     </div>
 
-                    <div class="message">
-                        We'll notify you as soon as early access is available. In the meantime, take care of yourself.
+                    <div class="message" style="text-align: center; margin: 30px 0;">
+                        <strong>We'll notify you as soon as early access is available.</strong><br>
+                        <span style="color: #7C3AED;">In the meantime, take care of yourself. 💜</span>
                     </div>
 
-                    <a href="https://soulconnect.health" class="cta-button">Visit SoulConnect</a>
-
-                    <div class="closing">
-                        Until then,<br>
-                        Take care of yourself.<br>
-                        <span class="gold-accent">💜</span>
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="https://soulconnect.health" class="cta-button">👉 Visit SoulConnect</a>
                     </div>
 
-                    <div class="closing" style="margin: 20px 0 0; color: #7C3AED; font-weight: 600;">
-                        The SoulConnect Team
+                    <div class="closing" style="text-align: center; margin: 30px 0 20px; font-size: 15px; line-height: 1.8;">
+                        Until we connect you with your perfect peer match,<br>
+                        <strong>Take care of yourself.</strong><br>
+                        <span class="gold-accent" style="font-size: 1.5em;">💜</span>
+                    </div>
+
+                    <div class="closing" style="margin: 20px 0 0; color: #7C3AED; font-weight: 600; text-align: center; font-size: 15px;">
+                        With care,<br>
+                        <strong>The SoulConnect Team</strong>
                     </div>
 
                     <div class="divider"></div>
