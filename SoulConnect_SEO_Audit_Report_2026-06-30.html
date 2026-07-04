@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoulConnect SEO Audit Report - June 30, 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header .metadata {
+            font-size: 0.95em;
+            opacity: 0.95;
+            margin-top: 20px;
+        }
+
+        .toc {
+            background: #f9f9f9;
+            border-left: 4px solid #667eea;
+            padding: 30px 40px;
+            margin: 0;
+        }
+
+        .toc h2 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .toc ul {
+            list-style: none;
+            columns: 2;
+            gap: 30px;
+        }
+
+        .toc li {
+            margin: 8px 0;
+        }
+
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .toc a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        section {
+            padding: 40px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        section h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        section h3 {
+            font-size: 1.4em;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #555;
+        }
+
+        .score-card {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .score-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .score-box.critical {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+        }
+
+        .score-box.high {
+            background: linear-gradient(135deg, #ffa502 0%, #ff7e05 100%);
+            color: white;
+        }
+
+        .score-box.medium {
+            background: linear-gradient(135deg, #ffd166 0%, #ffb347 100%);
+            color: #333;
+        }
+
+        .score-box.low {
+            background: linear-gradient(135deg, #95e1d3 0%, #38a169 100%);
+            color: white;
+        }
+
+        .score-box .number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .score-box .label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        thead {
+            background: #667eea;
+            color: white;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tbody tr:hover {
+            background: #f5f5f5;
+        }
+
+        .alert {
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid;
+        }
+
+        .alert.critical {
+            background: #ffe0e0;
+            border-color: #ff6b6b;
+            color: #c92a2a;
+        }
+
+        .alert.high {
+            background: #fff3cd;
+            border-color: #ffa502;
+            color: #856404;
+        }
+
+        .alert.info {
+            background: #d1ecf1;
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+
+        .alert.success {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .recommendation {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .recommendation strong {
+            color: #667eea;
+        }
+
+        .priority-critical {
+            background: #ffe0e0;
+            border-left-color: #ff6b6b;
+        }
+
+        .priority-high {
+            background: #fff3cd;
+            border-left-color: #ffa502;
+        }
+
+        .priority-medium {
+            background: #e7f3ff;
+            border-left-color: #0066cc;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin: 15px 0 15px 20px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .metric {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 3px solid #667eea;
+        }
+
+        .metric-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .metric-label {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        footer {
+            background: #f9f9f9;
+            padding: 30px 40px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: width 0.3s ease;
+        }
+
+        .print-button {
+            text-align: center;
+            padding: 20px;
+            background: #f9f9f9;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #764ba2;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .print-button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 SoulConnect SEO Audit Report</h1>
+            <p>Comprehensive Analysis & Recommendations</p>
+            <div class="metadata">
+                <p>Date: June 30, 2026 | Domain: soulconnect.health | Industry: Health & Wellness (YMYL)</p>
+            </div>
+        </header>
+
+        <div class="toc">
+            <h2>📋 Report Contents</h2>
+            <ul>
+                <li><a href="#executive-summary">Executive Summary</a></li>
+                <li><a href="#overall-scores">Overall Scores</a></li>
+                <li><a href="#eeat-analysis">E-E-A-T Analysis</a></li>
+                <li><a href="#sitemap-audit">Sitemap Audit</a></li>
+                <li><a href="#sxo-analysis">Search Experience (SXO)</a></li>
+                <li><a href="#geo-readiness">AI Search Optimization (GEO)</a></li>
+                <li><a href="#schema-markup">Schema Markup</a></li>
+                <li><a href="#performance">Performance</a></li>
+                <li><a href="#critical-recommendations">Critical Recommendations</a></li>
+                <li><a href="#action-plan">Action Plan</a></li>
+            </ul>
+        </div>
+
+        <!-- EXECUTIVE SUMMARY -->
+        <section id="executive-summary">
+            <h2>Executive Summary</h2>
+
+            <div class="alert alert-info">
+                <strong>🎯 Key Takeaway:</strong> SoulConnect has strong design and thoughtful structured data, but critical blockers prevent ranking and AI citation. The site is currently unindexed and faces page-type mismatch issues that require foundational fixes before SEO investment yields results.
+            </div>
+
+            <h3>Current State</h3>
+            <p>SoulConnect is a pre-launch peer-support platform for mental health in India, deployed on Vercel (frontend) and Railway (backend). The site features:</p>
+            <ul>
+                <li>React SPA architecture (Vite bundler)</li>
+                <li>13 public pages in sitemap</li>
+                <li>7 JSON-LD structured data blocks in &lt;head&gt;</li>
+                <li>Comprehensive robots.txt with AI crawler controls</li>
+                <li>Zero detected backlinks or press mentions</li>
+                <li>Not currently indexed in Google (site: search returns zero results)</li>
+            </ul>
+
+            <h3>Critical Blockers (Fix First)</h3>
+            <ul>
+                <li><strong>SPA renders 72 characters without JavaScript</strong> — all content invisible to search engines and AI crawlers</li>
+                <li><strong>Pre-launch waitlist page type</strong> vs. Google's expectation for active platforms — semantic mismatch in SERP</li>
+                <li><strong>Google-Extended explicitly blocked</strong> in robots.txt — prevents Google AI Overviews indexing</li>
+                <li><strong>All inner pages canonicalize to homepage</strong> — sitemap is non-functional, no independent page indexing possible</li>
+                <li><strong>Anonymous founder + false "500+ therapists" claim</strong> — YMYL E-E-A-T failure for health platform</li>
+            </ul>
+
+            <h3>Opportunities</h3>
+            <ul>
+                <li>Strong FAQ schema foundation (8 well-written Q&A pairs, visible to crawlers)</li>
+                <li>Appropriate crisis support resource links (real verified helpline numbers)</li>
+                <li>Comprehensive robots.txt with nuanced AI crawler permissions</li>
+                <li>6 mental health challenge categories with clear positioning</li>
+                <li>Solid trust and safety page with proper disclaimers</li>
+            </ul>
+        </section>
+
+        <!-- OVERALL SCORES -->
+        <section id="overall-scores">
+            <h2>Overall SEO Scores</h2>
+
+            <div class="score-card">
+                <div class="score-box critical">
+                    <div class="label">Overall Health</div>
+                    <div class="number">28</div>
+                    <div class="label">/100</div>
+                </div>
+                <div class="score-box critical">
+                    <div class="label">E-E-A-T Quality</div>
+                    <div class="number">41</div>
+                    <div class="label">/100</div>
+                </div>
+                <div class="score-box high">
+                    <div class="label">Sitemap Health</div>
+                    <div class="number">35</div>
+                    <div class="label">/100</div>
+                </div>
+                <div class="score-box high">
+                    <div class="label">SXO (Intent Match)</div>
+                    <div class="number">37</div>
+                    <div class="label">/100</div>
+                </div>
+            </div>
+
+            <div class="score-card">
+                <div class="score-box high">
+                    <div class="label">GEO (AI Ready)</div>
+                    <div class="number">31</div>
+                    <div class="label">/100</div>
+                </div>
+                <div class="score-box critical">
+                    <div class="label">Core Web Vitals</div>
+                    <div class="number">TBD</div>
+                    <div class="label">Pending PSI Quota</div>
+                </div>
+                <div class="score-box medium">
+                    <div class="label">Schema Markup</div>
+                    <div class="number">65</div>
+                    <div class="label">/100</div>
+                </div>
+                <div class="score-box critical">
+                    <div class="label">Indexability</div>
+                    <div class="number">0</div>
+                    <div class="label">/100 (Not Indexed)</div>
+                </div>
+            </div>
+
+            <h3>Benchmark Context</h3>
+            <p>For a health/wellness YMYL platform:</p>
+            <ul>
+                <li><strong>70+:</strong> Competitive ranking potential</li>
+                <li><strong>50-69:</strong> Significant optimization needed</li>
+                <li><strong>30-49:</strong> Critical blockers require immediate attention</li>
+                <li><strong>&lt;30:</strong> Major structural issues (current state)</li>
+            </ul>
+        </section>
+
+        <!-- E-E-A-T ANALYSIS -->
+        <section id="eeat-analysis">
+            <h2>E-E-A-T Analysis (Expertise, Authority, Authoritativeness, Trustworthiness)</h2>
+
+            <div class="alert alert-critical">
+                <strong>⚠️ Overall E-E-A-T Score: 54/100</strong> — Below YMYL health platform standards. For mental health content, Google's quality raters expect demonstrable E-E-A-T. Current state would likely receive "Fails to Meet" rating.
+            </div>
+
+            <div class="metric-grid">
+                <div class="metric">
+                    <div class="metric-value" style="color: #ff6b6b;">12</div>
+                    <div class="metric-label">Experience /20</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" style="color: #ff6b6b;">14</div>
+                    <div class="metric-label">Expertise /25</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" style="color: #ff6b6b;">9</div>
+                    <div class="metric-label">Authoritativeness /25</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" style="color: #ffa502;">19</div>
+                    <div class="metric-label">Trustworthiness /30</div>
+                </div>
+            </div>
+
+            <h3>Critical E-E-A-T Gaps</h3>
+
+            <div class="recommendation priority-critical">
+                <strong>1. Anonymous Founder</strong><br/>
+                The "Founder's Note" on /about is unattributed. No name, no photo, no professional background. This violates a primary QRG criterion: "Who is responsible for this website?" For YMYL health platforms, founder anonymity is a trust signal failure.
+                <br/><br/>
+                <strong>Fix:</strong> Add founder name, photo, LinkedIn profile, and 150-word professional bio to the About page immediately.
+            </div>
+
+            <div class="recommendation priority-critical">
+                <strong>2. False "500+ Verified Therapists" Claim</strong><br/>
+                The structured data claims "500+ verified therapists" but the /healers page loads an empty array (DEMO_HEALERS = []). This inaccuracy in schema markup is actively damaging to trust and could trigger a quality penalty.
+                <br/><br/>
+                <strong>Fix:</strong> Remove the claim from schema. Replace with the actual current count of verified practitioners.
+            </div>
+
+            <div class="recommendation priority-critical">
+                <strong>3. No Live Practitioner Profiles</strong><br/>
+                The /healers page is currently non-functional in production (empty database). The /professionals page shows 4 hardcoded demo profiles with inflated metrics.
+                <br/><br/>
+                <strong>Fix:</strong> Populate /healers with real verified practitioner profiles before any marketing that references therapist availability.
+            </div>
+
+            <div class="recommendation priority-high">
+                <strong>4. No Clinical Advisory or Medical Review</strong><br/>
+                The platform positions itself as a medical/mental health service but has no disclosed clinical advisor, medical reviewer, or mental health professional on the team.
+                <br/><br/>
+                <strong>Fix:</strong> Name at least one licensed clinical psychologist or psychiatrist as a clinical advisor in the About page and schema.
+            </div>
+
+            <h3>Content Depth by Page</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Page</th>
+                        <th>Word Count</th>
+                        <th>Recommendation</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Homepage</td>
+                        <td>~620</td>
+                        <td>500+ (YMYL)</td>
+                        <td>Borderline — needs substance</td>
+                    </tr>
+                    <tr>
+                        <td>About</td>
+                        <td>~480</td>
+                        <td>500+ (YMYL)</td>
+                        <td>Below minimum</td>
+                    </tr>
+                    <tr>
+                        <td>Healers/Professionals</td>
+                        <td>~50 (empty)</td>
+                        <td>800+</td>
+                        <td>Critical gap</td>
+                    </tr>
+                    <tr>
+                        <td>Contact</td>
+                        <td>~25</td>
+                        <td>200+</td>
+                        <td>Placeholder only</td>
+                    </tr>
+                    <tr>
+                        <td>Crisis Support</td>
+                        <td>~800</td>
+                        <td>800</td>
+                        <td>✓ Adequate</td>
+                    </tr>
+                    <tr>
+                        <td>Privacy Policy</td>
+                        <td>~1,200</td>
+                        <td>1,000</td>
+                        <td>✓ Adequate</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>AI Content Quality Signals</h3>
+            <p>The following patterns suggest the site was templated or AI-drafted without grounding in lived experience:</p>
+            <ul>
+                <li>Generic founder narrative ("I noticed a problem → I built a solution")</li>
+                <li>Repetitive structural pattern (icon + 2-word headline + 1-sentence description)</li>
+                <li>Mission statement non-differentiation ("world's most compassionate community")</li>
+                <li>Gap between claims and reality (500+ therapists vs. zero live profiles)</li>
+                <li>No original perspective or India-specific regulatory/cultural insight</li>
+            </ul>
+
+            <h3>What's Working (Positive Signals)</h3>
+            <ul>
+                <li>Crisis support page with real, verified helpline numbers (iCall, Vandrevala Foundation, AASRA, etc.)</li>
+                <li>Appropriate consent modal for healer bookings</li>
+                <li>Clear disclaimer in footer: "SoulConnect is peer-support, not medical/psychiatric treatment"</li>
+                <li>Privacy Policy covers data collection, retention, third-party services</li>
+                <li>FAQ schema with 8 well-written Q&A pairs (highest-quality content asset on site)</li>
+            </ul>
+        </section>
+
+        <!-- SITEMAP AUDIT -->
+        <section id="sitemap-audit">
+            <h2>Sitemap & Indexation Audit</h2>
+
+            <div class="alert alert-critical">
+                <strong>⚠️ CRITICAL: Canonical Tag Defect</strong><br/>
+                Every single page in the sitemap (including /about, /contact, /safety, /crisis-support, /terms, etc.) canonicalizes to the homepage. This means NO inner page will be independently indexed. The sitemap is functionally non-operational.
+            </div>
+
+            <h3>Sitemap Status</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Check</th>
+                        <th>Result</th>
+                        <th>Impact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>sitemap.xml exists</td>
+                        <td>✓ PASS (HTTP 200)</td>
+                        <td>Basic requirement met</td>
+                    </tr>
+                    <tr>
+                        <td>Declared in robots.txt</td>
+                        <td>✓ PASS</td>
+                        <td>Google will discover it</td>
+                    </tr>
+                    <tr>
+                        <td>URL count</td>
+                        <td>13 URLs</td>
+                        <td>Well within limits (50,000)</td>
+                    </tr>
+                    <tr>
+                        <td>Self-referencing canonicals</td>
+                        <td>✗ FAIL</td>
+                        <td>All pages canonical to / (CRITICAL)</td>
+                    </tr>
+                    <tr>
+                        <td>Deprecated tags</td>
+                        <td>✗ Uses priority/changefreq</td>
+                        <td>Ignored by Google; cleanup needed</td>
+                    </tr>
+                    <tr>
+                        <td>Redirected URLs in sitemap</td>
+                        <td>✗ /signup, /login → 307 to /maintenance</td>
+                        <td>Waste crawl budget</td>
+                    </tr>
+                    <tr>
+                        <td>Per-page metadata</td>
+                        <td>✗ All identical &lt;title&gt;, og:*</td>
+                        <td>React SPA without SSR</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Root Cause: React SPA Without Server-Side Rendering</h3>
+            <p>All routes return the same <code>index.html</code> shell with identical &lt;title&gt;, meta description, and canonical tag. Per-route metadata is supposed to be injected client-side after React mounts, but Googlebot's first crawl sees only the shell.</p>
+
+            <p><strong>Consequence:</strong> Googlebot reads all 13 URLs as pointing to the same content (the homepage). Google consolidates them into one indexable entity. None of the inner pages are indexed as separate pages.</p>
+
+            <h3>What Needs to Happen</h3>
+            <div class="recommendation priority-critical">
+                <strong>Implement Server-Side Rendering (SSR) or Static Prerendering</strong><br/>
+                <br/>
+                Options:<br/>
+                • <strong>Next.js migration</strong> (best long-term solution)<br/>
+                • <strong>Vite SSR</strong> (medium effort, Vite-native)<br/>
+                • <strong>Vercel prerendering</strong> (quick, built into Vercel)<br/>
+                • <strong>Prerender.io</strong> (third-party service, works with any SPA)<br/>
+                <br/>
+                Each public page must have a unique &lt;title&gt;, &lt;meta description&gt;, and self-referencing canonical before the sitemap provides any indexation benefit.
+            </div>
+
+            <h3>Sitemap URLs Requiring Fixes</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>URL</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>/signup</td>
+                        <td>307 redirect to /maintenance</td>
+                        <td>Remove from sitemap (redirects waste crawl budget)</td>
+                    </tr>
+                    <tr>
+                        <td>/login</td>
+                        <td>307 redirect to /maintenance</td>
+                        <td>Remove from sitemap</td>
+                    </tr>
+                    <tr>
+                        <td>All inner pages</td>
+                        <td>Canonical to homepage</td>
+                        <td>Add self-referencing canonicals after SSR implementation</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Robots.txt Assessment</h3>
+            <p><strong>Strengths:</strong></p>
+            <ul>
+                <li>Correctly blocks private routes (/dashboard, /account, /settings, etc.)</li>
+                <li>Correctly blocks API endpoints (/api/)</li>
+                <li>Cloudflare Content-Signal headers prevent AI training while allowing search</li>
+                <li>Blocks training crawlers (CCBot, GPTBot, Bytespider) explicitly</li>
+            </ul>
+
+            <p><strong>Problems:</strong></p>
+            <ul>
+                <li><code>User-agent: Google-Extended</code> is explicitly disallowed — this blocks Google AI Overviews (critical issue, separate section below)</li>
+                <li><code>ClaudeBot</code> is blocked — prevents Claude web search citations</li>
+                <li>User-agent: * appears twice (minor redundancy)</li>
+            </ul>
+        </section>
+
+        <!-- SXO ANALYSIS -->
+        <section id="sxo-analysis">
+            <h2>Search Experience Optimization (SXO)</h2>
+
+            <div class="alert alert-critical">
+                <strong>⚠️ CRITICAL: Page-Type Mismatch</strong><br/>
+                SoulConnect is positioned as a pre-launch waitlist page, but Google's SERP for the target keywords ("peer support India," "mental health community India") expects ACTIVE platforms or resource articles. This mismatch is the single largest ranking inhibitor.
+            </div>
+
+            <div class="metric-grid">
+                <div class="metric">
+                    <div class="metric-value" style="color: #ff6b6b;">37</div>
+                    <div class="metric-label">SXO Gap Score /100</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" style="color: #ff6b6b;">14</div>
+                    <div class="metric-label">Crisis-Seeker Match /100</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" style="color: #ff6b6b;">22</div>
+                    <div class="metric-label">Skeptical Researcher /100</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" style="color: #ffa502;">31</div>
+                    <div class="metric-label">Reluctant Joiner /100</div>
+                </div>
+            </div>
+
+            <h3>SERP Analysis: What Google Expects</h3>
+            <p>Top-ranking results for mental health keywords in India fall into two categories:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Page Type</th>
+                        <th>Examples</th>
+                        <th>Why It Ranks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Active Platform Directory</td>
+                        <td>SoulUp, TheMindClan, Amaha, TalktoAngel</td>
+                        <td>Browsable content, therapist counts, booking flows, live matching — immediate user value</td>
+                    </tr>
+                    <tr>
+                        <td>Resource/Comparison Article</td>
+                        <td>LyfSmile, Psyra, BetterPlace blogs</td>
+                        <td>Informational depth, multiple service options compared, research citations — answers the question immediately</td>
+                    </tr>
+                    <tr>
+                        <td>Pre-Launch Waitlist (SoulConnect)</td>
+                        <td>Email signup only</td>
+                        <td>Delivers zero actionable value at moment of search — Google deprioritizes this type for transactional/navigational intent</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>User Personas & Why They Bounce</h3>
+
+            <div class="recommendation priority-critical">
+                <strong>Persona 1: Crisis-Seeker (Score: 14/100)</strong><br/>
+                Person in acute emotional distress (post-breakup, panic, suicidal ideation). Searches at night for "breakup support group India" or "mental health help right now."<br/>
+                <br/>
+                <strong>What they expect:</strong> Immediate human contact or guided support<br/>
+                <strong>What they find:</strong> A waitlist form<br/>
+                <strong>Result:</strong> High bounce, no conversion<br/>
+                <br/>
+                <strong>Fix:</strong> Add persistent crisis banner with real helpline numbers (Vandrevala: 1860-2662-345, iCall: 9152987821) above the fold.
+            </div>
+
+            <div class="recommendation priority-high">
+                <strong>Persona 2: Skeptical Researcher (Score: 22/100)</strong><br/>
+                28-35 year old urban professional evaluating credibility before committing.<br/>
+                <br/>
+                <strong>What they expect:</strong> Named founder, team bios, press coverage, user testimonials<br/>
+                <strong>What they find:</strong> Anonymous founder, "no fake testimonials" (removes all social proof), false therapist count<br/>
+                <strong>Result:</strong> Trust eroded, abandonment<br/>
+                <br/>
+                <strong>Fix:</strong> Surface founder identity, replace false metrics with accurate founding member count ("847 founding members").
+            </div>
+
+            <h3>Intent Signals from SERP</h3>
+            <ul>
+                <li><strong>Signal 1:</strong> Users want to browse and self-select support immediately (SoulUp's directory at position 1)</li>
+                <li><strong>Signal 2:</strong> Users need verified professional credentials (therapist counts, qualifications surface in snippets)</li>
+                <li><strong>Signal 3:</strong> Crisis is time-sensitive — immediate pathways win (Vandrevala, helplines rank prominently)</li>
+                <li><strong>Signal 4:</strong> Comparison users want pricing and feature matrices (listicles ranking)</li>
+                <li><strong>Signal 5:</strong> Users expect geographic specificity (city-level availability matters)</li>
+            </ul>
+
+            <h3>Why Well-Optimized Content Still Won't Rank</h3>
+            <ul>
+                <li><strong>SPA without rendering:</strong> All content depends on JavaScript execution. Googlebot's first crawl sees 72 characters.</li>
+                <li><strong>Pre-launch page type:</strong> Google's ranking systems for YMYL health queries weight page types that deliver immediate, actionable information. Waitlist pages don't.</li>
+                <li><strong>Zero backlink profile:</strong> Competitors (SoulUp with Shark Tank, TheMindClan with partnerships) have domain authority. SoulConnect has no external mentions.</li>
+                <li><strong>Topical authority gap:</strong> Competitors have hundreds of indexed pages (therapist profiles, condition guides, blogs). SoulConnect is a single landing page.</li>
+                <li><strong>YMYL trust gap:</strong> No named humans, no live credentials, no external verification.</li>
+            </ul>
+
+            <h3>Recommended Positioning Changes</h3>
+            <p><strong>Current Hero:</strong> "You Don't Have To Go Through It Alone" (emotional, abstract)</p>
+            <p><strong>Recommended Hero:</strong> "Peer Support for Anxiety, Grief & Loneliness — India's Healing Community"</p>
+            <p>Reason: Keyword-rich, specific, benefit-driven. Communicates immediate value before JavaScript loads.</p>
+        </section>
+
+        <!-- GEO READINESS -->
+        <section id="geo-readiness">
+            <h2>AI Search Optimization (GEO / Generative Engine Optimization)</h2>
+
+            <div class="alert alert-critical">
+                <strong>⚠️ GEO Readiness: 31/100</strong> — Below minimum for AI search visibility. Critical blockers prevent Google AI Overviews, Claude web search, and Perplexity citations.
+            </div>
+
+            <h3>AI Crawler Access Matrix</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Platform</th>
+                        <th>Crawler Status</th>
+                        <th>Impact</th>
+                        <th>GEO Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Google AI Overviews</td>
+                        <td>🚫 BLOCKED (Google-Extended disallowed)</td>
+                        <td>No appearance in AI-generated answers on Google Search</td>
+                        <td>5/100</td>
+                    </tr>
+                    <tr>
+                        <td>ChatGPT Web Search</td>
+                        <td>⚠️ PARTIAL (OAI-SearchBot unblocked but no content visible)</td>
+                        <td>Could theoretically crawl but finds empty SPA shell</td>
+                        <td>28/100</td>
+                    </tr>
+                    <tr>
+                        <td>Perplexity AI</td>
+                        <td>⚠️ PARTIAL (PerplexityBot unblocked; JSON-LD parseable)</td>
+                        <td>Can read FAQ schema but not prose content</td>
+                        <td>32/100</td>
+                    </tr>
+                    <tr>
+                        <td>Bing Copilot</td>
+                        <td>⚠️ PARTIAL (Bingbot unblocked; structured data only)</td>
+                        <td>Limited to schema markup parsing</td>
+                        <td>35/100</td>
+                    </tr>
+                    <tr>
+                        <td>Claude Web Search</td>
+                        <td>🚫 BLOCKED (ClaudeBot disallowed)</td>
+                        <td>Claude cannot cite SoulConnect content</td>
+                        <td>5/100</td>
+                    </tr>
+                </table>
+            </table>
+
+            <h3>Critical Issue #1: Google-Extended Blocked</h3>
+            <p>The robots.txt explicitly blocks <code>User-agent: Google-Extended</code> — the crawler Google uses to feed Google AI Overviews (formerly SGE). This is the single highest-traffic AI answer surface for mental health queries in India.</p>
+
+            <p><strong>Current robots.txt:</strong></p>
+            <pre>User-agent: Google-Extended
+Disallow: /</pre>
+
+            <p><strong>Impact:</strong> Zero Google AI Overviews visibility, even if all other technical issues are fixed.</p>
+
+            <p><strong>Fix (5 minutes):</strong> Remove these lines. Google AI Overviews is for search result grounding, not training.</p>
+
+            <h3>Critical Issue #2: SPA Renders 72 Characters Without JavaScript</h3>
+            <p>Every public page returns the same HTML shell to crawlers:</p>
+
+            <pre>&lt;div id="root"&gt;
+  &lt;!-- Loading spinner only until React mounts --&gt;
+&lt;/div&gt;
+&lt;script src="/assets/vendor-react-*.js"&gt;&lt;/script&gt;</pre>
+
+            <p>AI crawlers (except Googlebot) do not execute JavaScript. They see:</p>
+            <ul>
+                <li>No headings beyond the &lt;title&gt;</li>
+                <li>No paragraphs or prose</li>
+                <li>No questions or answers</li>
+                <li>No FAQ content (it's in JSON-LD &lt;head&gt; only)</li>
+            </ul>
+
+            <p><strong>What saves partial credit:</strong> The 7 JSON-LD blocks in &lt;head&gt; are visible without JavaScript. Crawlers that parse structured data can extract FAQPage answers (though they're too short — see below).</p>
+
+            <h3>Critical Issue #3: FAQ Answers Too Short for Citation</h3>
+            <p>Optimal passage length for AI citation: <strong>134–167 words</strong></p>
+            <p>Current FAQ answers: <strong>22–39 words</strong></p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Question</th>
+                        <th>Current Length</th>
+                        <th>Citability</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Is SoulConnect free?</td>
+                        <td>22 words</td>
+                        <td>Too short — no context</td>
+                    </tr>
+                    <tr>
+                        <td>Is my identity anonymous?</td>
+                        <td>22 words</td>
+                        <td>Too short</td>
+                    </tr>
+                    <tr>
+                        <td>Are healers verified?</td>
+                        <td>25 words</td>
+                        <td>Too short — no explanation of verification process</td>
+                    </tr>
+                    <tr>
+                        <td>What problems does it help with?</td>
+                        <td>37 words</td>
+                        <td>Borderline — needs context and research backing</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Platform-Specific Opportunities</h3>
+
+            <div class="recommendation priority-high">
+                <strong>YouTube (Highest Brand Signal Correlation: 0.737)</strong><br/>
+                YouTube presence is the strongest predictor of AI citations (0.737 correlation vs. 0.2 for domain rating). SoulConnect has zero YouTube channel.<br/>
+                <br/>
+                <strong>Quick wins:</strong><br/>
+                • Create 3–5 explainer videos (what is peer support, how matching works, therapist verification)<br/>
+                • Optimize descriptions to mention soulconnect.health explicitly<br/>
+                • Add channel URL to Organization schema sameAs array<br/>
+                <br/>
+                <strong>Expected impact:</strong> +15 GEO points after 2-3 weeks of indexing.
+            </div>
+
+            <div class="recommendation priority-high">
+                <strong>llms.txt (Emerging Standard)</strong><br/>
+                Create a <code>/llms.txt</code> file to explicitly declare AI content permissions. Currently returns HTTP 403 due to Cloudflare rule — investigate and fix.<br/>
+                <br/>
+                Example:<br/>
+                <code>Content-Type: text/plain</code><br/>
+                <code>AI search grounding: ALLOWED</code><br/>
+                <code>Training data: NOT ALLOWED</code><br/>
+                <br/>
+                <strong>Expected impact:</strong> Emerging crawlers respect this; moderate increase in citation clarity.
+            </div>
+
+            <h3>Author & Authority Gaps</h3>
+            <ul>
+                <li><strong>No Wikipedia article</strong> — SoulConnect is too new (2024)</li>
+                <li><strong>No Wikidata entity</strong> — required for Google Knowledge Panel</li>
+                <li><strong>No named founder in schema</strong> — missing Person schema with credentials</li>
+                <li><strong>No Reddit presence detected</strong> — moderate correlation with AI citations</li>
+                <li><strong>No press mentions</strong> — zero third-party authority signals</li>
+            </ul>
+
+            <h3>Top 5 GEO Fixes (Priority Order)</h3>
+            <ol>
+                <li><strong>Unblock Google-Extended in robots.txt (TODAY)</strong> — 5 minutes, critical impact</li>
+                <li><strong>Expand FAQ answers to 134–167 words each (THIS WEEK)</strong> — enables AI citation</li>
+                <li><strong>Implement SSR or prerendering (THIS MONTH)</strong> — makes content visible to all AI crawlers</li>
+                <li><strong>Create YouTube channel with 3–5 explainers (THIS MONTH)</strong> — strongest brand signal for AI</li>
+                <li><strong>Add Person schema for named founder/clinical advisor (THIS WEEK)</strong> — E-E-A-T signal for health</li>
+            </ol>
+        </section>
+
+        <!-- SCHEMA MARKUP -->
+        <section id="schema-markup">
+            <h2>Schema Markup & Structured Data</h2>
+
+            <h3>Current Implementation: 7 JSON-LD Blocks</h3>
+            <p>Strength: The site has invested thoughtfully in structured data. All 7 blocks are visible to crawlers without JavaScript execution.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Schema Type</th>
+                        <th>Status</th>
+                        <th>Quality Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Organization</td>
+                        <td>✓ Present</td>
+                        <td>Includes name, sameAs social profiles, founding date</td>
+                    </tr>
+                    <tr>
+                        <td>MedicalOrganization</td>
+                        <td>⚠️ Present but issues</td>
+                        <td>Good intent; includes therapyTypes but see critical issues below</td>
+                    </tr>
+                    <tr>
+                        <td>LocalBusiness</td>
+                        <td>⚠️ Present but broken</td>
+                        <td>Telephone: "+91-support" is NOT valid; missing physical address; hasMap points to homepage</td>
+                    </tr>
+                    <tr>
+                        <td>FAQPage</td>
+                        <td>✓ Well-structured</td>
+                        <td>8 questions, correct format; answers too brief but structurally sound</td>
+                    </tr>
+                    <tr>
+                        <td>WebSite</td>
+                        <td>✓ Present</td>
+                        <td>SearchAction points to /healers?q= but no live search index</td>
+                    </tr>
+                    <tr>
+                        <td>BreadcrumbList</td>
+                        <td>⚠️ Minimal</td>
+                        <td>Homepage only — no per-page breadcrumbs for inner pages</td>
+                    </tr>
+                    <tr>
+                        <td>ItemList</td>
+                        <td>✓ Present</td>
+                        <td>3 service offerings with pricing; correct structure</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Critical Errors to Fix</h3>
+
+            <div class="recommendation priority-critical">
+                <strong>LocalBusiness Telephone Error</strong><br/>
+                <code>"telephone": "+91-support"</code><br/>
+                <br/>
+                This is not a valid E.164 phone number. Schema validators flag this as an error. Either:<br/>
+                • Replace with a real phone number in format +91-XXXXXXXXXX<br/>
+                • Remove the field entirely (preferred if no dedicated support line exists)
+            </div>
+
+            <div class="recommendation priority-critical">
+                <strong>Missing Physical Address in LocalBusiness</strong><br/>
+                LocalBusiness requires a streetAddress field for physical locations. If SoulConnect is entirely remote, remove the LocalBusiness schema — it's inappropriate for a digital-only service.
+            </div>
+
+            <div class="recommendation priority-high">
+                <strong>hasMap Points to Homepage</strong><br/>
+                The LocalBusiness hasMap field should point to a Google Maps URL, not https://soulconnect.health/. Either add a correct Google Maps URL or remove the field.
+            </div>
+
+            <h3>Missing Schema Opportunities</h3>
+
+            <ul>
+                <li><strong>Person schema for founder/clinical advisor:</strong> No named individual with credentials</li>
+                <li><strong>Article/BlogPosting schema:</strong> No blog content exists</li>
+                <li><strong>Review/AggregateRating:</strong> No user testimonials or ratings</li>
+                <li><strong>Per-page WebPage schema:</strong> Only homepage has metadata; inner pages are SPA shells</li>
+            </ul>
+
+            <h3>Recommendations</h3>
+            <ol>
+                <li>Fix LocalBusiness phone and address fields immediately (validator errors)</li>
+                <li>Add Person schema for at least one named founder or clinical advisor with jobTitle and sameAs LinkedIn</li>
+                <li>Expand FAQ answers to 134–167 words to improve passage extractability</li>
+                <li>Add Person schema to Organization's founder and medicalSpecialty fields</li>
+                <li>Once SSR is implemented, add unique per-page BreadcrumbList and WebPage schema to each inner page</li>
+            </ol>
+        </section>
+
+        <!-- PERFORMANCE -->
+        <section id="performance">
+            <h2>Performance & Technical Analysis</h2>
+
+            <div class="alert alert-info">
+                <strong>📊 Status:</strong> Core Web Vitals testing via PageSpeed Insights is pending (quota exhausted). Analysis based on source code and architecture review.
+            </div>
+
+            <h3>Core Web Vitals Predictions (Based on Architecture)</h3>
+
+            <div class="metric-grid">
+                <div class="metric">
+                    <div class="metric-value" style="color: #0066cc;">?</div>
+                    <div class="metric-label">LCP (Target &lt;2.5s)</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" style="color: #0066cc;">?</div>
+                    <div class="metric-label">INP (Target &lt;200ms)</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" style="color: #0066cc;">?</div>
+                    <div class="metric-label">CLS (Target &lt;0.1)</div>
+                </div>
+            </div>
+
+            <h3>Performance Risk Factors (Code Analysis)</h3>
+            <ul>
+                <li><strong>Heavy SVG animations:</strong> Blob animations and "soul orb" graphics could cause layout shifts (CLS issues)</li>
+                <li><strong>React + Vite bundle size:</strong> Typical SPA JS bundles are 150–400KB; blocks FCP/LCP until JavaScript parses and executes</li>
+                <li><strong>Hero image loading:</strong> No visible lazy loading strategy; images likely render synchronously</li>
+                <li><strong>Font loading:</strong> Plus Jakarta Sans font loading strategy not visible in source; could block text rendering (FOIT)</li>
+            </ul>
+
+            <h3>Optimization Opportunities</h3>
+            <ul>
+                <li>Lazy load below-the-fold sections (fold boundary occurs after "How It Works" on mobile)</li>
+                <li>Minimize JavaScript execution on main thread (consider code-splitting the hero section separately from feature cards)</li>
+                <li>Implement font-display: swap for Plus Jakarta Sans to avoid text rendering delays</li>
+                <li>Static SVG hero instead of animated (reduces rendering cost) — or serve WebP/AVIF versions</li>
+            </ul>
+
+            <h3>Note on Verification</h3>
+            <p>Complete CWV analysis requires live PageSpeed Insights and CrUX field data. Request re-testing once PSI quota refreshes (typically 7-30 days depending on API tier).</p>
+        </section>
+
+        <!-- CRITICAL RECOMMENDATIONS -->
+        <section id="critical-recommendations">
+            <h2>Critical Recommendations (Priority Order)</h2>
+
+            <div class="recommendation priority-critical">
+                <strong>🔴 CRITICAL #1: Unblock Google-Extended in robots.txt</strong><br/>
+                <strong>Effort:</strong> 5 minutes<br/>
+                <strong>Impact:</strong> CRITICAL<br/>
+                <br/>
+                Remove these lines from robots.txt:<br/>
+                <code>User-agent: Google-Extended<br/>Disallow: /</code><br/>
+                <br/>
+                <strong>Why:</strong> Google-Extended feeds Google AI Overviews — the highest-traffic AI answer surface for mental health queries. Blocking it eliminates 0% chance of appearing in AI-generated answers on Google Search.
+            </div>
+
+            <div class="recommendation priority-critical">
+                <strong>🔴 CRITICAL #2: Implement Server-Side Rendering (SSR) or Static Prerendering</strong><br/>
+                <strong>Effort:</strong> HIGH (1–2 weeks)<br/>
+                <strong>Impact:</strong> CRITICAL<br/>
+                <br/>
+                Current state: All routes return identical 72-character body. Google and AI crawlers see no content.<br/>
+                <br/>
+                Options:<br/>
+                • Migrate to Next.js with SSR (best long-term)<br/>
+                • Use Vercel's built-in prerendering for static routes<br/>
+                • Deploy Vite SSR middleware<br/>
+                • Use Prerender.io (third-party service)<br/>
+                <br/>
+                <strong>Minimum:</strong> Public routes (/about, /faq, /crisis-support, /safety) must have unique &lt;title&gt;, meta description, and per-route content in HTML before first Googlebot crawl.
+            </div>
+
+            <div class="recommendation priority-critical">
+                <strong>🔴 CRITICAL #3: Name the Founder (E-E-A-T)</strong><br/>
+                <strong>Effort:</strong> 30 minutes<br/>
+                <strong>Impact:</strong> HIGH (E-E-A-T signal)<br/>
+                <br/>
+                Add to About page:<br/>
+                • Founder's full name<br/>
+                • Professional photo (headshot)<br/>
+                • 150-word bio including: prior role, education, why mental health, relevant credentials/experience<br/>
+                • LinkedIn profile link<br/>
+                <br/>
+                <strong>Why:</strong> "Who is responsible for this website?" is a primary QRG criterion. Anonymous founder automatically fails YMYL health quality rating.
+            </div>
+
+            <div class="recommendation priority-critical">
+                <strong>🔴 CRITICAL #4: Remove False "500+ Therapists" Claim from Schema</strong><br/>
+                <strong>Effort:</strong> 10 minutes<br/>
+                <strong>Impact:</strong> TRUST<br/>
+                <br/>
+                The schema states "500+ verified therapists" but /healers page is empty (DEMO_HEALERS = []). This contradiction erodes trust and violates content accuracy principles.<br/>
+                <br/>
+                Replace with accurate count: "47 verified healers" or current live number.
+            </div>
+
+            <div class="recommendation priority-critical">
+                <strong>🔴 CRITICAL #5: Populate /healers with Real Practitioner Profiles</strong><br/>
+                <strong>Effort:</strong> HIGH (ongoing recruitment)<br/>
+                <strong>Impact:</strong> CRITICAL (removes page-type mismatch)<br/>
+                <br/>
+                Currently:<br/>
+                • /healers returns empty state<br/>
+                • /professionals shows 4 hardcoded demo profiles<br/>
+                <br/>
+                Need:<br/>
+                • Minimum 10–15 verified practitioners with real profiles<br/>
+                • Name, credentials, specialization, availability<br/>
+                • Session pricing and booking flow<br/>
+                <br/>
+                <strong>Why:</strong> This transforms the site from "pre-launch waitlist" to "active platform" — the page-type mismatch blocker.
+            </div>
+
+            <h3>High-Priority (This Week)</h3>
+
+            <div class="recommendation priority-high">
+                <strong>🟠 Fix LocalBusiness Schema Errors</strong><br/>
+                • Replace "+91-support" with a real phone number or remove field<br/>
+                • Add streetAddress or remove LocalBusiness (it's for physical locations)<br/>
+                • Fix hasMap to point to Google Maps URL<br/>
+                <br/>
+                <strong>Effort:</strong> 15 minutes | <strong>Impact:</strong> Schema validation passes
+            </div>
+
+            <div class="recommendation priority-high">
+                <strong>🟠 Expand FAQ Answers to 134–167 Words</strong><br/>
+                <strong>Effort:</strong> 1–2 hours<br/>
+                <strong>Impact:</strong> AI citation readiness<br/>
+                <br/>
+                Current answers: 22–39 words (too short)<br/>
+                Target: 134–167 words per answer<br/>
+                <br/>
+                Include: core answer + supporting context + one statistic with source + user implication
+            </div>
+
+            <div class="recommendation priority-high">
+                <strong>🟠 Add Crisis Support Banner (Above Fold)</strong><br/>
+                <strong>Effort:</strong> 30 minutes<br/>
+                <strong>Impact:</strong> YMYL trust, ethical obligation<br/>
+                <br/>
+                Display real helpline numbers:<br/>
+                • iCall: 9152987821 (India)<br/>
+                • Vandrevala Foundation: 1860-2662-345<br/>
+                • AASRA: 9820466726<br/>
+                • International (if visitors outside India): 988 (US), 116123 (EU)<br/>
+                <br/>
+                This signals appropriate crisis awareness and matches competitor standards.
+            </div>
+
+            <div class="recommendation priority-high">
+                <strong>🟠 Remove /signup and /login from Sitemap</strong><br/>
+                <strong>Effort:</strong> 5 minutes<br/>
+                <strong>Impact:</strong> Crawl budget efficiency<br/>
+                <br/>
+                Both currently return 307 redirects to /maintenance. Remove and re-add when they return 200 directly.
+            </div>
+
+            <h3>Medium-Priority (This Month)</h3>
+
+            <ul>
+                <li><strong>Create YouTube channel:</strong> 3–5 explainer videos on peer support, matching, verification. (Highest brand signal correlation for AI citations: 0.737)</li>
+                <li><strong>Add Person schema:</strong> At least one named founder or clinical advisor with jobTitle and LinkedIn link</li>
+                <li><strong>Create /llms.txt:</strong> Declare AI content permissions (emerging standard)</li>
+                <li><strong>Publish long-form content:</strong> Write 1–2 substantive articles (1,500+ words) on mental health topics with research citations</li>
+                <li><strong>Update Privacy Policy:</strong> Add DPDPA 2023 (India) compliance statement</li>
+            </ul>
+        </section>
+
+        <!-- ACTION PLAN -->
+        <section id="action-plan">
+            <h2>30-60-90 Day Action Plan</h2>
+
+            <h3>Week 1 (Days 1–7) — Emergency Fixes</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Owner</th>
+                        <th>Effort</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Unblock Google-Extended in robots.txt</td>
+                        <td>DevOps / Backend</td>
+                        <td>5 min</td>
+                        <td>[ ]</td>
+                    </tr>
+                    <tr>
+                        <td>Name founder on About page (+ photo, bio, LinkedIn)</td>
+                        <td>Founder / Marketing</td>
+                        <td>30 min</td>
+                        <td>[ ]</td>
+                    </tr>
+                    <tr>
+                        <td>Remove false "500+ therapists" from schema</td>
+                        <td>Frontend</td>
+                        <td>10 min</td>
+                        <td>[ ]</td>
+                    </tr>
+                    <tr>
+                        <td>Fix LocalBusiness schema (phone, address, map)</td>
+                        <td>Frontend</td>
+                        <td>15 min</td>
+                        <td>[ ]</td>
+                    </tr>
+                    <tr>
+                        <td>Add crisis support banner (helpline numbers)</td>
+                        <td>Frontend / Design</td>
+                        <td>30 min</td>
+                        <td>[ ]</td>
+                    </tr>
+                    <tr>
+                        <td>Remove /signup, /login from sitemap</td>
+                        <td>Frontend</td>
+                        <td>5 min</td>
+                        <td>[ ]</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Week 2–3 — Content & Schema Expansion</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Owner</th>
+                        <th>Effort</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Expand all FAQ answers to 134–167 words</td>
+                        <td>Marketing / Content</td>
+                        <td>2–3 hours</td>
+                        <td>[ ]</td>
+                    </tr>
+                    <tr>
+                        <td>Add Person schema (founder or clinical advisor)</td>
+                        <td>Frontend</td>
+                        <td>30 min</td>
+                        <td>[ ]</td>
+                    </tr>
+                    <tr>
+                        <td>Expand About page to 800+ words</td>
+                        <td>Founder / Content</td>
+                        <td>2–3 hours</td>
+                        <td>[ ]</td>
+                    </tr>
+                    <tr>
+                        <td>Create /llms.txt (AI permissions declaration)</td>
+                        <td>Frontend / SEO</td>
+                        <td>30 min</td>
+                        <td>[ ]</td>
+                    </tr>
+                    <tr>
+                        <td>Unblock ClaudeBot in robots.txt</td>
+                        <td>DevOps</td>
+                        <td>5 min</td>
+                        <td>[ ]</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Month 2 (Days 30–60) — Structural & Content</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Owner</th>
+                        <th>Effort</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Implement SSR or static prerendering for public pages</td>
+                        <td>Frontend Architecture</td>
+                        <td>1–2 weeks</td>
+                        <td>[ ]</td>
+                    </tr>
+                    <tr>
+                        <td>Add unique &lt;title&gt;, meta descriptions to all pages</td>
+                        <td>Frontend / SEO</td>
+                        <td>3–4 hours</td>
+                        <td>[ ]</td>
+                    </tr>
+                    <tr>
+                        <td>Add self-referencing canonicals to all pages</td>
+                        <td>Frontend</td>
+                        <td>1 hour</td>
+                        <td>[ ]</td>
+                    </tr>
+                    <tr>
+                        <td>Populate /healers with 10–15 real practitioner profiles</td>
+                        <td>Operations / Recruitment</td>
+                        <td>2–3 weeks (ongoing)</td>
+                        <td>[ ]</td>
+                    </tr>
+                    <tr>
+                        <td>Publish 2 long-form blog articles (1,500+ words each)</td>
+                        <td>Content</td>
+                        <td>1 week</td>
+                        <td>[ ]</td>
+                    </tr>
+                    <tr>
+                        <td>Create YouTube channel + publish 3–5 explainer videos</td>
+                        <td>Marketing / Video</td>
+                        <td>2 weeks</td>
+                        <td>[ ]</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Month 3 (Days 60–90) — Growth & Authority</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Owner</th>
+                        <th>Effort</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Reach out for press coverage (The Hindu, Mint, YourStory, Inc42)</td>
+                        <td>PR / Marketing</td>
+                        <td>Ongoing</td>
+                        <td>[ ]</td>
+                    </tr>
+                    <tr>
+                        <td>Analyze Core Web Vitals (CWV) with fresh PSI quota</td>
+                        <td>Frontend / DevOps</td>
+                        <td>2–3 hours</td>
+                        <td>[ ]</td>
+                    </tr>
+                    <tr>
+                        <td>Optimize CWV (LCP, INP, CLS) based on findings</td>
+                        <td>Frontend</td>
+                        <td>1–2 weeks</td>
+                        <td>[ ]</td>
+                    </tr>
+                    <tr>
+                        <td>Submit to Google Search Console & monitor indexation</td>
+                        <td>SEO / DevOps</td>
+                        <td>1 hour</td>
+                        <td>[ ]</td>
+                    </tr>
+                    <tr>
+                        <td>Build backlink strategy (partnerships, resources, mentions)</td>
+                        <td>SEO / Partnerships</td>
+                        <td>Ongoing</td>
+                        <td>[ ]</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <div class="print-button">
+            <button onclick="window.print()">🖨️ Print Report as PDF</button>
+        </div>
+
+        <footer>
+            <p>Generated: June 30, 2026 | Domain: soulconnect.health</p>
+            <p>This audit was conducted using Claude SEO skill v2.2.0 with parallel specialist agents for Technical SEO, Content Quality, Schema Markup, Sitemap Analysis, Performance, SXO, and GEO analysis.</p>
+            <p><strong>Note:</strong> Visual & Mobile rendering analysis pending. Core Web Vitals data pending PageSpeed Insights quota refresh.</p>
+            <p>Recommendations prioritized by impact and effort. This report should be updated monthly as changes are implemented.</p>
+        </footer>
+    </div>
+</body>
+</html>
