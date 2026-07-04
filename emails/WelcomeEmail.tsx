@@ -105,9 +105,6 @@ export const WelcomeEmail = ({ userEmail, userName }: WelcomeEmailProps) => {
             <Text style={heartIcon}>💜</Text>
             <Text style={teamName}>The SoulConnect Team</Text>
           </Section>
-
-          {/* Footer - Minimal */}
-          <EmailFooter userEmail={userEmail} />
         </Container>
 
         {/* VML Fallback for Outlook */}
