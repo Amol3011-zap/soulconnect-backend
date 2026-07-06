@@ -130,7 +130,7 @@ td {{ padding: 0; }}
 <tbody>
 <tr>
 <td width="600" style="padding: 16px 0; width: 600px; text-align: center; line-height: 0; font-size: 0;">
-<img src="https://res.cloudinary.com/lh7xcjvh/image/upload/f_auto,q_auto/ChatGPT_Image_Jul_6_2026_03_22_00_AM_qkzxxu.png" width="420" alt="SoulConnect" style="width: 100%; max-width: 420px; height: auto; display: block; margin: 0 auto; padding: 0; border: 0; outline: 0; text-decoration: none;">
+<img src="https://res.cloudinary.com/lh7xcjvh/image/upload/f_auto,q_auto/ChatGPT_Image_Jul_6_2026_03_22_00_AM_qkzxxu.png" width="520" alt="SoulConnect" style="width: 100%; max-width: 520px; height: auto; display: block; margin: 0 auto; padding: 0; border: 0; outline: 0; text-decoration: none;">
 </td>
 </tr>
 <tr>
