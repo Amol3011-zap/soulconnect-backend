@@ -9,7 +9,7 @@ export const EmailHeader = () => {
           <tr>
             <td style={headerImageCell}>
               <Img
-                src="https://raw.githubusercontent.com/Amol3011-zap/soulconnect-backend/main/emails/email.png"
+                src="https://res.cloudinary.com/lh7xcjvh/image/upload/f_auto,q_auto/ChatGPT_Image_Jul_6_2026_03_22_00_AM_qkzxxu.png"
                 alt="SoulConnect"
                 style={logoImage}
               />
