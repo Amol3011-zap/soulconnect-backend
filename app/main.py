@@ -12,6 +12,7 @@ from app.routes import challenges
 from app.routes import dashboard
 from app.routes import analytics, consent, privacy
 from app.routes import early_access
+from app.routes import pulse
 from app.database import engine, Base
 
 # Must import all models before create_all so SQLAlchemy registers every table
@@ -20,10 +21,8 @@ import app.models  # noqa: F401
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    import os
     from sqlalchemy import text
-    db_url = os.getenv("DATABASE_URL", "NOT SET")
-    print(f"DATABASE_URL starts with: {db_url[:40]}...")
+    print("Database connection initialized")
     print("Creating database tables...")
     Base.metadata.create_all(bind=engine)
     print("Running column migrations...")
@@ -91,6 +90,7 @@ app.include_router(analytics.router, prefix="/api/analytics", tags=["Analytics"]
 app.include_router(consent.router, prefix="/api/consent", tags=["Consent"])
 app.include_router(privacy.router, prefix="/api/privacy", tags=["Privacy & GDPR"])
 app.include_router(early_access.router, prefix="/api/early-access", tags=["Early Access"])
+app.include_router(pulse.router, prefix="/api/pulse", tags=["Global Pulse"])
 
 
 @app.get("/")
@@ -109,5 +109,12 @@ if __name__ == "__main__":
         "app.main:app",
         host="0.0.0.0",
         port=int(os.getenv("PORT", 8000)),
-        reload=True
+        reload=True,
+        # Uvicorn's default forwarded_allow_ips is "127.0.0.1", which makes
+        # it trust X-Forwarded-For from any loopback connection — including
+        # a local attacker or a direct (non-proxied) client. Disabling it
+        # means request.client.host is always the true direct TCP peer, so
+        # app/services/client_ip.py's TRUSTED_PROXY_IPS allowlist is the
+        # only thing that can ever make X-Forwarded-For trusted.
+        forwarded_allow_ips=[],
     )

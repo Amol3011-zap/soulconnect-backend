@@ -698,3 +698,24 @@ class EarlyAccessSubmission(Base):
     __table_args__ = (
         Index("ix_early_access_created", "created_at"),
     )
+
+
+# ========== GLOBAL PULSE ==========
+# Anonymous, unauthenticated check-ins for the "How Do You Feel?" / Global
+# Pulse feature. No user_id, no name, no email, no exact geo — country is the
+# most precise location ever stored. Aggregation/thresholding happens at
+# query time in app/routes/pulse.py, never by exposing raw rows publicly.
+
+class PulseCheckIn(Base):
+    __tablename__ = "pulse_checkins"
+
+    id           = Column(Integer, primary_key=True, index=True)
+    problems     = Column(JSON, nullable=False)   # list[str], 1-2 problem ids
+    country_code = Column(String(2), nullable=True)   # ISO 3166-1 alpha-2, e.g. "IN"
+    country_name = Column(String(80), nullable=True)
+    created_at   = Column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        Index("ix_pulse_checkins_created", "created_at"),
+        Index("ix_pulse_checkins_country", "country_code"),
+    )
