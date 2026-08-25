@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 
 from app.services.pulse_aggregation import (
     MIN_AGGREGATION_THRESHOLD,
+    RECENT_WINDOW_HOURS,
     VISIBILITY_DELAY_MINUTES,
     bucket_count,
     build_category_breakdown,
@@ -265,11 +266,30 @@ class TestBuildSnapshot:
         )
         serialized_keys = set(snapshot.keys())
         assert serialized_keys == {
-            "total", "categories", "countries", "map",
+            "total", "recent_checkins", "recent_window_hours",
+            "categories", "countries", "map",
             "min_threshold", "visibility_delay_minutes",
         }
         for country in snapshot["countries"]:
             assert set(country.keys()) == {"code", "name", "count_range"}
+
+    def test_recent_checkins_defaults_to_zero(self):
+        snapshot = build_snapshot(total=0, problem_rows=[], country_counts=[], checkin_rows=[])
+        assert snapshot["recent_checkins"] == 0
+
+    def test_recent_checkins_passes_through_undelayed_and_unthresholded(self):
+        # recent_checkins reflects the caller's own count directly — unlike
+        # categories/countries/map, it is not derived from problem_rows/
+        # country_counts/checkin_rows and has no threshold applied.
+        snapshot = build_snapshot(
+            total=1, problem_rows=[], country_counts=[], checkin_rows=[],
+            recent_checkins=1,
+        )
+        assert snapshot["recent_checkins"] == 1
+
+    def test_recent_window_hours_is_exposed_in_response(self):
+        snapshot = build_snapshot(total=0, problem_rows=[], country_counts=[], checkin_rows=[])
+        assert snapshot["recent_window_hours"] == RECENT_WINDOW_HOURS
 
     def test_low_volume_snapshot_hides_categories_and_countries_but_shows_total(self):
         snapshot = build_snapshot(

@@ -42,6 +42,15 @@ MIN_AGGREGATION_THRESHOLD = int(os.getenv("PULSE_MIN_AGGREGATION_THRESHOLD", "5"
 # is trivially identifiable by its timing alone.
 VISIBILITY_DELAY_MINUTES = int(os.getenv("PULSE_VISIBILITY_DELAY_MINUTES", "15"))
 
+# Window for the always-visible "recent activity" count — a single number
+# with no category/geography attached, so it carries essentially none of
+# the fingerprinting risk that motivates thresholding/delaying `categories`/
+# `countries`/`map`: a bare count of recent submissions doesn't tell an
+# observer WHAT anyone selected or WHERE they are, only that some number of
+# people did something recently. Not threshold-gated, not delay-gated,
+# same treatment as `total`. Configurable via PULSE_RECENT_WINDOW_HOURS.
+RECENT_WINDOW_HOURS = int(os.getenv("PULSE_RECENT_WINDOW_HOURS", "1"))
+
 PROBLEM_IDS = {
     "anxiety", "relationships", "mood", "loneliness", "burnout",
     "family", "selfworth", "identity", "grief", "career", "sleep", "other",
@@ -193,16 +202,19 @@ def build_snapshot(
     country_counts: List[Tuple[Optional[str], Optional[str], int]],
     checkin_rows: List[Tuple[Optional[str], List[str]]],
     threshold: int = MIN_AGGREGATION_THRESHOLD,
+    recent_checkins: int = 0,
 ) -> Dict:
     """Build the public snapshot.
 
     IMPORTANT: `problem_rows`, `country_counts`, and `checkin_rows` must
     already be restricted by the caller (see app/routes/pulse.py) to
-    check-ins with created_at older than visibility_cutoff(). `total` is
-    the one exception — it reflects all check-ins ever recorded, including
-    ones still inside the visibility delay, since it's a single coarse
-    number with no category/geography attached and the product wants it to
-    move immediately on every submission.
+    check-ins with created_at older than visibility_cutoff(). `total` and
+    `recent_checkins` are the exceptions — both reflect check-ins including
+    ones still inside the visibility delay, since both are single coarse
+    numbers with no category/geography attached and the product wants them
+    to move immediately. `recent_checkins` is the caller-supplied count of
+    check-ins within RECENT_WINDOW_HOURS (see that constant's docstring for
+    why this is safe to leave unthresholded/undelayed).
 
     Why the before/after polling attack no longer works:
       An attacker submits one check-in and immediately re-queries this
@@ -221,6 +233,8 @@ def build_snapshot(
     """
     return {
         "total": total,
+        "recent_checkins": recent_checkins,
+        "recent_window_hours": RECENT_WINDOW_HOURS,
         "categories": build_category_breakdown(problem_rows, threshold),
         "countries": build_country_list(country_counts, threshold),
         "map": build_map_points(checkin_rows, threshold),

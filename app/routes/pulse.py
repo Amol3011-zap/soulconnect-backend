@@ -32,6 +32,7 @@ from app.services.iso_countries import ISO_3166_1_ALPHA2
 from app.services.pulse_aggregation import (
     MIN_AGGREGATION_THRESHOLD,
     PROBLEM_IDS,
+    RECENT_WINDOW_HOURS,
     build_snapshot,
     visibility_cutoff,
 )
@@ -164,9 +165,11 @@ async def submit_checkin(
 async def get_global_pulse(db: Session = Depends(get_db)):
     """Public aggregated snapshot. Never returns individual check-in rows.
 
-    `total` reflects every check-in ever recorded and updates immediately —
-    it's a single coarse number with no category/geography attached, and
-    the product wants the "N check-ins so far" stat to move right away.
+    `total` and `recent_checkins` reflect every check-in ever recorded and
+    update immediately — both are single coarse numbers with no category/
+    geography attached, so the product surfaces them without the threshold/
+    delay gating the rest of the response needs (see RECENT_WINDOW_HOURS's
+    docstring in pulse_aggregation.py for why that's safe).
 
     Every other field (`categories`, `countries`, `map`) only reflects
     check-ins older than visibility_cutoff() — a freshly-submitted check-in
@@ -180,6 +183,9 @@ async def get_global_pulse(db: Session = Depends(get_db)):
         return cached[1]
 
     total = db.query(PulseCheckIn).count()
+
+    recent_since = datetime.utcnow() - timedelta(hours=RECENT_WINDOW_HOURS)
+    recent_checkins = db.query(PulseCheckIn).filter(PulseCheckIn.created_at >= recent_since).count()
 
     cutoff = visibility_cutoff(datetime.utcnow())
     visible = db.query(PulseCheckIn).filter(PulseCheckIn.created_at <= cutoff)
@@ -210,6 +216,7 @@ async def get_global_pulse(db: Session = Depends(get_db)):
         country_counts=country_counts,
         checkin_rows=checkin_rows,
         threshold=MIN_AGGREGATION_THRESHOLD,
+        recent_checkins=recent_checkins,
     )
 
     _snapshot_cache["snapshot"] = (time.time(), snapshot)
