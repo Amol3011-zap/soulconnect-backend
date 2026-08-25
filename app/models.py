@@ -719,3 +719,16 @@ class PulseCheckIn(Base):
         Index("ix_pulse_checkins_created", "created_at"),
         Index("ix_pulse_checkins_country", "country_code"),
     )
+
+
+# Separate, structurally disconnected from PulseCheckIn on purpose: this
+# table only ever answers "has this IP checked in recently" for cooldown
+# enforcement. It stores a salted one-way hash of the IP, never the raw IP,
+# and has no foreign key or join path to PulseCheckIn — so even direct
+# access to this table cannot reveal what a given IP selected or reported.
+class PulseCheckInCooldown(Base):
+    __tablename__ = "pulse_checkin_cooldowns"
+
+    id           = Column(Integer, primary_key=True, index=True)
+    ip_hash      = Column(String(64), unique=True, nullable=False, index=True)  # sha256 hex digest
+    last_checkin_at = Column(DateTime, default=datetime.utcnow, nullable=False)
