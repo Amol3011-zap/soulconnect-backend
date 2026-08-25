@@ -23,7 +23,7 @@ from sqlalchemy.orm import Session
 
 from app.models import PulseCheckInCooldown
 
-COOLDOWN_HOURS = int(os.getenv("PULSE_COOLDOWN_HOURS", "24"))
+COOLDOWN_HOURS = int(os.getenv("PULSE_COOLDOWN_HOURS", "3"))
 
 # Only used to make the stored hash non-trivially-reversible; this is not a
 # security secret in the auth sense (nothing sensitive is protected by it
