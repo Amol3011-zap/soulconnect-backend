@@ -701,10 +701,14 @@ class EarlyAccessSubmission(Base):
 
 
 # ========== GLOBAL PULSE ==========
-# Anonymous, unauthenticated check-ins for the "How Do You Feel?" / Global
-# Pulse feature. No user_id, no name, no email, no exact geo — country is the
-# most precise location ever stored. Aggregation/thresholding happens at
-# query time in app/routes/pulse.py, never by exposing raw rows publicly.
+# Unauthenticated check-ins for the "How Do You Feel?" / Global Pulse
+# feature. No user_id, no name, no email — but as of this table version,
+# ip_address and city ARE retained for internal records (product decision;
+# see the "Anonymous" label change on the check-in screen, which was
+# updated to stop overclaiming). The public API in app/routes/pulse.py
+# never returns ip_address or city, and only ever returns aggregated,
+# threshold-gated counts — this column existing does not change what the
+# public endpoint exposes, only what's kept internally.
 
 class PulseCheckIn(Base):
     __tablename__ = "pulse_checkins"
@@ -713,6 +717,8 @@ class PulseCheckIn(Base):
     problems     = Column(JSON, nullable=False)   # list[str], 1-2 problem ids
     country_code = Column(String(2), nullable=True)   # ISO 3166-1 alpha-2, e.g. "IN"
     country_name = Column(String(80), nullable=True)
+    city         = Column(String(120), nullable=True)   # IP-derived, best-effort
+    ip_address   = Column(String(45), nullable=True)     # internal record only; never returned by any API response. IPv6-safe length.
     created_at   = Column(DateTime, default=datetime.utcnow)
 
     __table_args__ = (

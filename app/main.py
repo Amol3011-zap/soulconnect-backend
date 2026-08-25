@@ -40,6 +40,9 @@ async def lifespan(app: FastAPI):
             conn.execute(text("ALTER TABLE early_access_submissions ADD COLUMN IF NOT EXISTS struggle VARCHAR(100)"))
             conn.execute(text("ALTER TABLE early_access_submissions ADD COLUMN IF NOT EXISTS referral_code VARCHAR(100)"))
             conn.execute(text("ALTER TABLE early_access_submissions ALTER COLUMN name DROP NOT NULL"))
+            # Global Pulse — internal-record location fields (never exposed by any API response)
+            conn.execute(text("ALTER TABLE pulse_checkins ADD COLUMN IF NOT EXISTS city VARCHAR(120)"))
+            conn.execute(text("ALTER TABLE pulse_checkins ADD COLUMN IF NOT EXISTS ip_address VARCHAR(45)"))
             conn.commit()
         print("Column migrations complete!")
     except Exception as e:

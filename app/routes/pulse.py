@@ -1,13 +1,17 @@
 """
-Global Pulse — anonymous emotional check-ins ("How Do You Feel?").
+Global Pulse — emotional check-ins ("How Do You Feel?").
 
-Privacy model:
-  - No auth, no user_id, no name/email/IP stored on the check-in row.
-  - Country is client-reported (best-effort, e.g. from browser locale) and is
-    the most precise location ever persisted — no lat/lng, no city.
-  - The public GET endpoint only ever returns aggregates, computed by
-    app/services/pulse_aggregation.py. Any country/category whose count is
-    below MIN_AGGREGATION_THRESHOLD is omitted rather than exposing a small,
+Data model (updated — product decision, not the original design):
+  - No auth, no user_id, no name/email.
+  - ip_address and an IP-derived city ARE now retained on the check-in row
+    for internal records. Location is resolved server-side from the
+    request IP via app/services/ip_geolocation.py (falls back to the
+    client-reported locale hint if that lookup fails), rather than
+    trusting only the browser's language setting.
+  - The public GET endpoint still only ever returns aggregates, computed
+    by app/services/pulse_aggregation.py, and NEVER returns ip_address or
+    city. Any country/category whose count is below
+    MIN_AGGREGATION_THRESHOLD is omitted rather than exposing a small,
     potentially identifying number.
 """
 import time
@@ -23,6 +27,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models import PulseCheckIn
 from app.services.client_ip import get_client_ip
+from app.services.ip_geolocation import lookup as geolocate_ip
 from app.services.iso_countries import ISO_3166_1_ALPHA2
 from app.services.pulse_aggregation import (
     MIN_AGGREGATION_THRESHOLD,
@@ -127,10 +132,21 @@ async def submit_checkin(
             detail=f"You've already checked in recently. Please try again in up to {COOLDOWN_HOURS} hours.",
         )
 
+    # IP-based geolocation is authoritative when it succeeds (it doesn't
+    # depend on the visitor's browser language matching their actual
+    # location); the client-reported locale hint is only a fallback for
+    # when the lookup fails (e.g. local dev, private IP, third-party
+    # outage).
+    geo = await geolocate_ip(ip)
+    country_code = geo["country_code"] or data.country_code
+    country_name = geo["country_name"] or data.country_name
+
     checkin = PulseCheckIn(
         problems=data.problems,
-        country_code=data.country_code,
-        country_name=data.country_name,
+        country_code=country_code,
+        country_name=country_name,
+        city=geo["city"],
+        ip_address=ip if ip != "unknown" else None,
         created_at=datetime.utcnow(),
     )
     db.add(checkin)
