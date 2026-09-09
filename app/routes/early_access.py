@@ -47,13 +47,19 @@ VALID_STRUGGLES = {
     "Grief", "Stress", "Self Growth", "Other",
 }
 
+VALID_REFERRAL_SOURCES = {
+    "Instagram", "X (Twitter)", "LinkedIn", "Reddit",
+    "Google / Search", "Blog / Article",
+}
+
 
 class WaitlistRequest(BaseModel):
-    name:          Optional[str] = None
-    email:         str
-    struggle:      Optional[str] = None
-    source:        Optional[str] = "Landing Page"
-    referral_code: Optional[str] = None
+    name:            Optional[str] = None
+    email:           str
+    struggle:        Optional[str] = None
+    source:          Optional[str] = "Landing Page"
+    referral_code:   Optional[str] = None
+    referral_source: Optional[str] = None
 
     @field_validator("email", mode="before")
     @classmethod
@@ -92,6 +98,16 @@ class WaitlistRequest(BaseModel):
             return v
         return str(v).strip()[:100]
 
+    @field_validator("referral_source", mode="before")
+    @classmethod
+    def validate_referral_source(cls, v):
+        if v is None:
+            return v
+        v = str(v).strip()
+        if v and v not in VALID_REFERRAL_SOURCES:
+            return None
+        return v or None
+
 
 class WaitlistResponse(BaseModel):
     success: bool
@@ -129,13 +145,14 @@ async def join_waitlist(
             )
 
         submission = EarlyAccessSubmission(
-            name          = data.name,
-            email         = data.email,
-            struggle      = data.struggle,
-            challenge     = data.struggle,       # backward compat column
-            source        = (data.source or "Landing Page")[:100],
-            referral_code = data.referral_code,
-            created_at    = datetime.utcnow(),
+            name            = data.name,
+            email           = data.email,
+            struggle        = data.struggle,
+            challenge       = data.struggle,       # backward compat column
+            source          = (data.source or "Landing Page")[:100],
+            referral_code   = data.referral_code,
+            referral_source = data.referral_source,
+            created_at      = datetime.utcnow(),
         )
         db.add(submission)
         db.commit()
@@ -145,8 +162,8 @@ async def join_waitlist(
             raise RuntimeError("Insert did not return a row ID")
 
         logger.info(
-            "Waitlist signup: id=%s email=%s struggle=%s source=%s ip=%s",
-            submission.id, data.email, data.struggle, data.source, ip,
+            "Waitlist signup: id=%s email=%s struggle=%s source=%s referral_source=%s ip=%s",
+            submission.id, data.email, data.struggle, data.source, data.referral_source, ip,
         )
 
         # ─── Send emails (failures logged but don't break signup) ───────────────
@@ -230,9 +247,10 @@ async def get_waitlist_admin(
             "name":          r.name,
             "email":         r.email,
             "struggle":      r.struggle,
-            "source":        r.source,
-            "referral_code": getattr(r, "referral_code", None),
-            "created_at":    r.created_at.isoformat() if r.created_at else None,
+            "source":          r.source,
+            "referral_code":   getattr(r, "referral_code", None),
+            "referral_source": getattr(r, "referral_source", None),
+            "created_at":      r.created_at.isoformat() if r.created_at else None,
         }
         for r in rows
     ]

@@ -691,9 +691,10 @@ class EarlyAccessSubmission(Base):
     email         = Column(String(320), nullable=False, unique=True, index=True)
     struggle      = Column(String(100), nullable=True)   # renamed from challenge
     challenge     = Column(String(100), nullable=True)   # kept for backward compat
-    source        = Column(String(100), default="Landing Page")
-    referral_code = Column(String(100), nullable=True)   # for future referral tracking
-    created_at    = Column(DateTime, default=datetime.utcnow)
+    source          = Column(String(100), default="Landing Page")
+    referral_code   = Column(String(100), nullable=True)   # for future referral tracking
+    referral_source = Column(String(50), nullable=True)    # "How did you hear about us?" dropdown
+    created_at      = Column(DateTime, default=datetime.utcnow)
 
     __table_args__ = (
         Index("ix_early_access_created", "created_at"),

@@ -39,6 +39,7 @@ async def lifespan(app: FastAPI):
             # Waitlist / early access columns
             conn.execute(text("ALTER TABLE early_access_submissions ADD COLUMN IF NOT EXISTS struggle VARCHAR(100)"))
             conn.execute(text("ALTER TABLE early_access_submissions ADD COLUMN IF NOT EXISTS referral_code VARCHAR(100)"))
+            conn.execute(text("ALTER TABLE early_access_submissions ADD COLUMN IF NOT EXISTS referral_source VARCHAR(50)"))
             conn.execute(text("ALTER TABLE early_access_submissions ALTER COLUMN name DROP NOT NULL"))
             # Global Pulse — internal-record location fields (never exposed by any API response)
             conn.execute(text("ALTER TABLE pulse_checkins ADD COLUMN IF NOT EXISTS city VARCHAR(120)"))
