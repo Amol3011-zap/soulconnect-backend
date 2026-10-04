@@ -1,7 +1,8 @@
 """
 Anonymous Visitor Analytics — privacy-first, no PII collected.
 """
-from fastapi import APIRouter, Depends, Request
+import os
+from fastapi import APIRouter, Depends, Request, Response
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from typing import Optional, List
@@ -12,9 +13,46 @@ from app.models import VisitorAnalytics, SecurityLog
 
 router = APIRouter()
 
+# Single source of truth for "what counts as our production site" — the
+# same allow-list the CORS middleware uses (app/main.py), via the same
+# ALLOWED_ORIGINS env var. Exactly these two origins by default; set
+# ALLOWED_ORIGINS on the host to override (comma-separated).
+_raw_origins = os.getenv(
+    "ALLOWED_ORIGINS",
+    "https://soulconnect.health,https://www.soulconnect.health",
+)
+_ALLOWED_ORIGINS = {o.strip() for o in _raw_origins.split(",") if o.strip()}
+
+# Local/dev escape hatch — off by default everywhere, including production.
+# Only set ALLOW_DEV_ORIGINS=true in a local .env; never on Railway.
+_ALLOW_DEV_ORIGINS = os.getenv("ALLOW_DEV_ORIGINS", "false").lower() in ("true", "1")
+_DEV_ORIGINS = {
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+}
+
+
+def _is_allowed_origin(origin: Optional[str]) -> bool:
+    """
+    True if this request is allowed to write to visitor_analytics.
+
+    No Origin header at all = same-origin / non-browser request (server-to-
+    server calls, curl, the Vite dev proxy stripping Origin before forwarding
+    to the real backend). We only reject a *wrong* Origin, never a missing
+    one, since genuine same-origin browser requests never send Origin.
+    """
+    if origin is None:
+        return True
+    if origin in _ALLOWED_ORIGINS:
+        return True
+    if _ALLOW_DEV_ORIGINS and origin in _DEV_ORIGINS:
+        return True
+    return False
+
 
 class VisitorSessionCreate(BaseModel):
     session_id: str
+    hostname: Optional[str] = None
     device_type: Optional[str] = None
     browser: Optional[str] = None
     os: Optional[str] = None
@@ -38,16 +76,25 @@ class VisitorSessionUpdate(BaseModel):
 
 
 @router.post("/session/start")
-def start_visitor_session(data: VisitorSessionCreate, db: Session = Depends(get_db)):
+def start_visitor_session(data: VisitorSessionCreate, request: Request, response: Response, db: Session = Depends(get_db)):
     """Record the start of an anonymous visitor session."""
+    if not _is_allowed_origin(request.headers.get("origin")):
+        # Disallowed Origin: no error page, no write, no information leak —
+        # just a bare 204 so a forged/foreign caller learns nothing.
+        response.status_code = 204
+        return None
+
     existing = db.query(VisitorAnalytics).filter(
         VisitorAnalytics.session_id == data.session_id
     ).first()
     if existing:
         return {"status": "exists", "session_id": data.session_id}
 
+    is_internal = bool(data.hostname) and data.hostname not in ("soulconnect.health", "www.soulconnect.health")
     session = VisitorAnalytics(
         session_id=data.session_id,
+        hostname=data.hostname,
+        is_internal=is_internal,
         device_type=data.device_type,
         browser=data.browser,
         os=data.os,
@@ -68,8 +115,12 @@ def start_visitor_session(data: VisitorSessionCreate, db: Session = Depends(get_
 
 
 @router.post("/session/update")
-def update_visitor_session(data: VisitorSessionUpdate, db: Session = Depends(get_db)):
+def update_visitor_session(data: VisitorSessionUpdate, request: Request, response: Response, db: Session = Depends(get_db)):
     """Update session with page views and duration."""
+    if not _is_allowed_origin(request.headers.get("origin")):
+        response.status_code = 204
+        return None
+
     session = db.query(VisitorAnalytics).filter(
         VisitorAnalytics.session_id == data.session_id
     ).first()
@@ -90,18 +141,15 @@ def update_visitor_session(data: VisitorSessionUpdate, db: Session = Depends(get
 
 @router.get("/summary")
 def get_analytics_summary(db: Session = Depends(get_db)):
-    """Public summary stats — no PII returned."""
+    """Public summary stats — no PII returned. Excludes internal/dev traffic."""
     now = datetime.utcnow()
     last_30 = now - timedelta(days=30)
     last_7 = now - timedelta(days=7)
 
-    total_sessions = db.query(VisitorAnalytics).count()
-    sessions_30d = db.query(VisitorAnalytics).filter(
-        VisitorAnalytics.created_at >= last_30
-    ).count()
-    sessions_7d = db.query(VisitorAnalytics).filter(
-        VisitorAnalytics.created_at >= last_7
-    ).count()
+    base = db.query(VisitorAnalytics).filter(VisitorAnalytics.is_internal.is_(False))
+    total_sessions = base.count()
+    sessions_30d = base.filter(VisitorAnalytics.created_at >= last_30).count()
+    sessions_7d = base.filter(VisitorAnalytics.created_at >= last_7).count()
 
     return {
         "total_sessions": total_sessions,

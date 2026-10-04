@@ -44,6 +44,12 @@ async def lifespan(app: FastAPI):
             # Global Pulse — internal-record location fields (never exposed by any API response)
             conn.execute(text("ALTER TABLE pulse_checkins ADD COLUMN IF NOT EXISTS city VARCHAR(120)"))
             conn.execute(text("ALTER TABLE pulse_checkins ADD COLUMN IF NOT EXISTS ip_address VARCHAR(45)"))
+            # Visitor analytics — hostname + internal-traffic flag (see app/routes/analytics.py)
+            conn.execute(text("ALTER TABLE visitor_analytics ADD COLUMN IF NOT EXISTS hostname VARCHAR(255)"))
+            conn.execute(text("ALTER TABLE visitor_analytics ADD COLUMN IF NOT EXISTS is_internal BOOLEAN DEFAULT FALSE NOT NULL"))
+            conn.execute(text(
+                "CREATE INDEX IF NOT EXISTS ix_visitor_analytics_hostname ON visitor_analytics (hostname)"
+            ))
             conn.commit()
         print("Column migrations complete!")
     except Exception as e:

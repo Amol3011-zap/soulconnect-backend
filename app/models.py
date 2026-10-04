@@ -408,6 +408,8 @@ class VisitorAnalytics(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     session_id = Column(String(128), unique=True, index=True, nullable=False)
+    hostname = Column(String(255))            # window.location.hostname the session was recorded from
+    is_internal = Column(Boolean, default=False, nullable=False)  # dev/team traffic, excluded from reporting
     device_type = Column(String(20))          # mobile / tablet / desktop
     browser = Column(String(50))
     os = Column(String(50))
@@ -430,6 +432,7 @@ class VisitorAnalytics(Base):
     __table_args__ = (
         Index("ix_visitor_analytics_created", "created_at"),
         Index("ix_visitor_analytics_country", "country"),
+        Index("ix_visitor_analytics_hostname", "hostname"),
     )
 
 
